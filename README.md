@@ -72,7 +72,7 @@ terms:
 uv run --script scripts/validate.py
 ```
 
-今の一覧（`terms/tech.yaml`）は技術文書向けの41語です。どの語も、作成者が AI の技術文書でよく見ると判断して選んだもので、出現頻度はまだ測っていません。
+今の一覧（`terms/tech.yaml`）は技術文書向けの94語です。出現頻度の調査（[research/2026-11-term-survey](research/2026-11-term-survey/README.md)）の結果を、各語の `evidence` に書いています。
 
 ## プロジェクトごとの除外
 

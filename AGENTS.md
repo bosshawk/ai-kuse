@@ -16,6 +16,7 @@ CLAUDE.md は置いていません。Claude Code v2.1.277 以降は、CLAUDE.md 
 | `scripts/validate.py` | 語の一覧の検査（schema、id の重複、正規表現、例文） |
 | `tests/` | pytest。`fixtures/should_not_hit.md` は誤検出を防ぐための文 |
 | `install.sh` | `~/.claude/skills/ai-kuse` に symlink を張る |
+| `research/<年-月>-<題>/` | 語の調査。README に方法・結果・偏りを書き、`results/` には件数だけを置く（記事の本文や会話ログは `data/` に置き、コミットしない） |
 
 ## コマンド
 
@@ -38,7 +39,7 @@ uv run --script scripts/check.py README.md
 - 1語1件。`examples` は必須で、`bad` はその語に当たり、`good` は当たらない文にする。validate.py がこれを確かめる。
 - 1字の語や、ほかの語の一部になる語は、`regex` で前後を絞るか `exclude` / `exclude_regex` で除外する。足したら、ふつうの文で当たらないことを `tests/fixtures/should_not_hit.md` に1行足して確かめる。
 - 実際の文書で試し、誤検出が多い語は `severity: info` にするか、パターンを絞る。
-- 出現頻度はまだ測っていない。根拠のある語（調査や出典がある語）は `why` に出典を書く。
+- `evidence` には調査の数値（10万字あたりの件数）を書く。出典の数値は、自分で開いて確かめたものだけを `note` に書く。
 - 変更のあとは validate.py と pytest の両方を通す。
 
 ## 文書を書くとき

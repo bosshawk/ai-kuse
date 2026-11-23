@@ -3,59 +3,165 @@
   "$id": "https://github.com/bosshawk/ai-kuse/schema/terms.schema.json",
   "title": "ai-kuse terms file",
   "type": "object",
-  "required": ["version", "domain", "categories", "terms"],
+  "required": [
+    "version",
+    "domain",
+    "categories",
+    "terms"
+  ],
   "additionalProperties": false,
   "properties": {
-    "version": { "const": 1 },
-    "domain": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
-    "description": { "type": "string" },
+    "version": {
+      "const": 1
+    },
+    "domain": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "description": {
+      "type": "string"
+    },
     "categories": {
       "type": "object",
       "minProperties": 1,
-      "additionalProperties": { "type": "string" }
+      "additionalProperties": {
+        "type": "string"
+      }
     },
     "terms": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/term" }
+      "items": {
+        "$ref": "#/$defs/term"
+      }
     }
   },
   "$defs": {
-    "stringList": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "stringList": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
     "term": {
       "type": "object",
-      "required": ["id", "term", "category", "severity", "match", "why", "suggest", "examples"],
+      "required": [
+        "id",
+        "term",
+        "category",
+        "severity",
+        "match",
+        "why",
+        "suggest",
+        "examples"
+      ],
       "additionalProperties": false,
       "properties": {
-        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
-        "term": { "type": "string", "minLength": 1 },
-        "yomi": { "type": "string" },
-        "category": { "type": "string" },
-        "severity": { "enum": ["warn", "info"] },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "term": {
+          "type": "string",
+          "minLength": 1
+        },
+        "yomi": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "warn",
+            "info"
+          ]
+        },
         "match": {
           "type": "object",
           "additionalProperties": false,
-          "anyOf": [{ "required": ["literal"] }, { "required": ["regex"] }],
+          "anyOf": [
+            {
+              "required": [
+                "literal"
+              ]
+            },
+            {
+              "required": [
+                "regex"
+              ]
+            }
+          ],
           "properties": {
-            "literal": { "$ref": "#/$defs/stringList" },
-            "regex": { "$ref": "#/$defs/stringList" },
-            "exclude": { "$ref": "#/$defs/stringList" },
-            "exclude_regex": { "$ref": "#/$defs/stringList" }
+            "literal": {
+              "$ref": "#/$defs/stringList"
+            },
+            "regex": {
+              "$ref": "#/$defs/stringList"
+            },
+            "exclude": {
+              "$ref": "#/$defs/stringList"
+            },
+            "exclude_regex": {
+              "$ref": "#/$defs/stringList"
+            }
           }
         },
-        "why": { "type": "string", "minLength": 1 },
-        "suggest": { "$ref": "#/$defs/stringList", "minItems": 1 },
-        "keep_when": { "$ref": "#/$defs/stringList" },
+        "why": {
+          "type": "string",
+          "minLength": 1
+        },
+        "suggest": {
+          "$ref": "#/$defs/stringList",
+          "minItems": 1
+        },
+        "keep_when": {
+          "$ref": "#/$defs/stringList"
+        },
         "examples": {
           "type": "array",
           "minItems": 1,
           "items": {
             "type": "object",
-            "required": ["bad", "good"],
+            "required": [
+              "bad",
+              "good"
+            ],
             "additionalProperties": false,
             "properties": {
-              "bad": { "type": "string", "minLength": 1 },
-              "good": { "type": "string", "minLength": 1 }
+              "bad": {
+                "type": "string",
+                "minLength": 1
+              },
+              "good": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "survey"
+          ],
+          "properties": {
+            "survey": {
+              "type": "string"
+            },
+            "ai": {
+              "type": "number"
+            },
+            "human2021": {
+              "type": "number"
+            },
+            "qiita2026": {
+              "type": "number"
+            },
+            "note": {
+              "type": "string"
             }
           }
         }
