@@ -175,7 +175,7 @@ terms:
     term: 剥がす
     yomi: はがす
     category: metaphor-verb
-    severity: info
+    severity: warn
     match:
       regex: ['剥が(す|し|さ|せ|そ)', 'はが(す|して|した|せる)']
       exclude: [はがき, 引き剥が, 引きはが]
@@ -218,7 +218,7 @@ terms:
     term: 束ねる
     yomi: たばねる
     category: metaphor-verb
-    severity: info
+    severity: warn
     match:
       regex: ['束ね(る|て|た|ます|ました|られ)']
     why: 設定や処理を「束ねる」は、まとめ方（1ファイルにする、1関数にする）が書かれない。
@@ -247,7 +247,7 @@ terms:
     term: 倒す
     yomi: たおす
     category: metaphor-verb
-    severity: info
+    severity: warn
     match:
       regex: ['に倒(す|し|さ|せ|そ)']
     why: 設定値を「true に倒す」は口語。有効にするのか、値を設定するのかを書けば足りる。
@@ -261,7 +261,7 @@ terms:
     term: 生やす
     yomi: はやす
     category: metaphor-verb
-    severity: info
+    severity: warn
     match:
       regex: ['生や(す|し|さ|せ|そ)']
       exclude: [ひげを生や, 髭を生や]
@@ -271,6 +271,23 @@ terms:
     examples:
       - bad: 管理用のエンドポイントを生やす。
         good: 管理用のエンドポイントを追加する。
+
+  - id: ochiru
+    term: 落ちる
+    yomi: おちる
+    category: metaphor-verb
+    severity: warn
+    match:
+      regex: ['落ち(る|た|て|ます|ました|ない|なく|やすい|れば|ず)']
+      exclude: [落ち着, 落ち込, 落ち度, 落ち合, 気落ち, 落ち葉, 抜け落ち]
+    why: サーバーやテストが「落ちる」は口語。停止したのか、異常終了したのか、失敗したのかが分からない。
+    suggest: [停止する, 異常終了する, 失敗する, 応答しなくなる, 接続が切れる]
+    keep_when: [物理的に落ちるとき]
+    examples:
+      - bad: 負荷が高いとサーバーが落ちる。
+        good: 負荷が高いとサーバーが応答しなくなる。
+      - bad: CI でテストが落ちた。
+        good: CI でテストが失敗した。
 
   # ---- 英語の直訳語 ----
   - id: hyomenseki
@@ -319,7 +336,7 @@ terms:
     term: 足場
     yomi: あしば
     category: calque
-    severity: info
+    severity: warn
     match:
       literal: [足場]
     why: scaffold の直訳。ひな形の生成のことなら、そう書いたほうが伝わる。
