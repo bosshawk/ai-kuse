@@ -72,7 +72,7 @@ terms:
 uv run --script scripts/validate.py
 ```
 
-今の一覧（`terms/tech.yaml`）は技術文書向けの92語です。出現頻度の調査（[research/2026-11-term-survey](research/2026-11-term-survey/README.md)）の結果を、各語の `evidence` に書いています。
+今の一覧（`terms/tech.yaml`）は技術文書向けの98語です。出現頻度の調査（[research/2026-11-term-survey](research/2026-11-term-survey/README.md)）の結果を、各語の `evidence` に書いています。
 
 ## プロジェクトごとの除外
 

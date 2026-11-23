@@ -21,6 +21,7 @@ categories:
   cliche: 評価の決まり文句
   structure-metaphor: 構造を体や建物にたとえる名詞
   metaphor-noun: 比喩の名詞
+  metaphor-modifier: 比喩の修飾語
 
 terms:
   # ---- 役割を大げさに呼ぶ名詞（inflated-noun）----
@@ -1449,3 +1450,104 @@ terms:
     examples:
       - bad: 公開 API と内部 API の線引きを決める。
         good: どの API を外部に公開するかを決める。
+
+  # ---- 比喩の修飾語（metaphor-modifier）----
+  - id: nama
+    term: 生の・生〇〇
+    yomi: なまの
+    category: metaphor-modifier
+    severity: warn
+    evidence: {survey: 2026-11, ai: 2.32, human2021: 0.55, qiita2026: 1.17}
+    match:
+      regex:
+        - '(?<![一-龥々])生の'
+        - '(?<![一-龥々])生(ログ|値|API|JSON|文字列|パス|バイト|出力|応答|レスポンス|テキスト|ファイル|ボディ|イベント|計測|結果|トークン|ヘッダ)'
+      exclude: [生の声]
+    why: raw の直訳。加工していないのか、検証していないのか、測ったままなのかが分からない。「生データ」「生 SQL」のように定着した言い方は、ほかに少ない。
+    suggest: [加工していない, 元の, 測ったままの, 検証前の, 〇〇を通さない]
+    keep_when: [生データ（定着した言い方）, 生 SQL（ORM を通さない SQL）, 生の声（利用者の意見）]
+    examples:
+      - bad: 最終日の生の計測から失点を数える。
+        good: 最終日に測った値をそのまま使って、失点を数える。
+      - bad: 生ログは各 worktree に残してある。
+        good: 加工していないログは、各 worktree に残してある。
+      - bad: 関数には生のパスを渡す。
+        good: 関数には、正規化する前のパスを渡す。
+
+  - id: su
+    term: 素の
+    yomi: すの
+    category: metaphor-modifier
+    severity: warn
+    evidence: {survey: 2026-11, ai: 1.48, human2021: 0.16, qiita2026: 1.35}
+    match:
+      regex: ['(?<![一-龥々])素の']
+      exclude: [素のJavaScript, 素の JavaScript, 素のJS, 素の JS, 素のまま]
+    why: vanilla / plain の直訳。何も足していないのか、設定を変えていないのか、標準の機能だけなのかが分からない。
+    suggest: [標準の, 設定を変えていない, 追加の機能なしの, 〇〇だけの]
+    keep_when: [フレームワークを使わない JavaScript を「素の JavaScript」と呼ぶ定着した言い方]
+    examples:
+      - bad: まず素の nginx でできることを使う。
+        good: まず nginx の標準の機能でできることを使う。
+      - bad: 準備なしの素の Opus と比べる。
+        good: 指示やスキルを足していない Opus と比べる。
+
+  - id: urade
+    term: 裏で
+    yomi: うらで
+    category: metaphor-modifier
+    severity: info
+    evidence: {survey: 2026-11, ai: 6.05, human2021: 0.07, qiita2026: 0.22}
+    match:
+      regex: ['裏で(回|動|走|待|実行|測|処理|進|流)']
+    why: バックグラウンドで実行していることを「裏で」と言っている。何が、どのプロセスで動いているのかを書くと伝わる。
+    suggest: [バックグラウンドで, 別のプロセスで, 並行して]
+    keep_when: [内部で何が起きているかを説明する「裏で何が起こるか」のような言い方]
+    examples:
+      - bad: VACUUM ありの 1 回目を裏で回しています。
+        good: VACUUM ありの 1 回目をバックグラウンドで実行しています。
+
+  - id: omoteni
+    term: 表に出る
+    yomi: おもてにでる
+    category: metaphor-modifier
+    severity: info
+    evidence: {survey: 2026-11, ai: 0.28, human2021: 0.07, qiita2026: 0.12}
+    match:
+      regex: ['表に出(る|な|ま|さ|す|し|て|た)']
+    why: 不具合が「表に出る」、値を「表に出す」は、再現するのか、表示するのか、出力するのかが分からない。
+    suggest: [現れる, 再現する, 表示する, 出力する]
+    keep_when: []
+    examples:
+      - bad: この穴は手元では表に出ません。
+        good: この不具合はローカル環境では再現しません。
+
+  - id: hakushi
+    term: 白紙から
+    yomi: はくしから
+    category: metaphor-modifier
+    severity: info
+    evidence: {survey: 2026-11, ai: 0.35, human2021: 0.0, qiita2026: 0.07}
+    match:
+      regex: ['白紙(から|で|に戻|の状態)']
+    why: 何を前提にせず、どこからやり直すのかが書かれない。
+    suggest: [一から, 今の構成を前提にせず, 最初から]
+    keep_when: [計画を取り消す「白紙に戻す」という慣用の意味（技術文書以外）]
+    examples:
+      - bad: 構成を白紙から見直す。
+        good: 今の構成を前提にせず、構成を見直す。
+
+  - id: usui
+    term: 薄い（層・ラッパー）
+    yomi: うすい
+    category: metaphor-modifier
+    severity: info
+    evidence: {survey: 2026-11, ai: 0.35, human2021: 0.05, qiita2026: 0.2}
+    match:
+      regex: ['薄い(ラッパー|層|抽象|皮|膜|レイヤー|ラップ|殻)', '薄く(包|かぶせ|ラップ)']
+    why: thin wrapper / thin layer の直訳。何をして何をしない層なのかを書くと伝わる。
+    suggest: [〇〇を呼ぶだけの関数, 変換だけをする層, 小さなラッパー]
+    keep_when: [「薄いラッパー」が読み手に通じる開発者向けの文書]
+    examples:
+      - bad: 内部ハンドラを公開用の薄いラッパーから呼ぶ。
+        good: 公開用の関数は、引数を検査してから内部ハンドラを呼ぶだけにする。
