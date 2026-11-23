@@ -18,6 +18,7 @@ categories:
   calque: 英語の直訳語
   stiff-kango: 硬い漢語
   cliche: 評価の決まり文句
+  structure-metaphor: 構造を体や建物にたとえる名詞
 
 terms:
   # ---- 役割を大げさに呼ぶ名詞 ----
@@ -290,6 +291,25 @@ terms:
         good: CI でテストが失敗した。
 
   # ---- 英語の直訳語 ----
+  - id: mon
+    term: 門
+    yomi: もん
+    category: calque
+    severity: warn
+    match:
+      regex:
+        - '(レビュー|品質|検査|承認|確認|テスト|CI|デプロイ|リリース|最初|最後|最終|この|次の|[0-9０-９一二三]つ目の)の?門'
+        - '門(を通|をくぐ|で止|番|を設け|を越|を抜け)'
+      exclude: [専門, 部門, 入門, 門外, 名門, 関門, 校門, 正門, 裏門, 門限, 一門, 門下, 門戸, 登竜門, 鬼門, 水門, 門前]
+    why: gate の直訳。何を確かめ、何を止めるのかが書かれない。
+    suggest: [チェック, 確認, 必須チェック（CI）, 承認]
+    keep_when: [建物の門]
+    examples:
+      - bad: レビューの門を通ったものだけをマージする。
+        good: レビューで承認されたものだけをマージする。
+      - bad: CI が門番になる。
+        good: CI のチェックに通らないとマージできない。
+
   - id: hyomenseki
     term: 表面積
     yomi: ひょうめんせき
@@ -402,6 +422,64 @@ terms:
     examples:
       - bad: このクラスの責務はログの書き出しです。
         good: このクラスはログを書き出します。
+
+  # ---- 構造を体や建物にたとえる名詞 ----
+  - id: sebone
+    term: 背骨
+    yomi: せぼね
+    category: structure-metaphor
+    severity: warn
+    match:
+      literal: [背骨]
+    why: backbone の直訳。何が全体を支えているのか、何に依存しているのかが書かれない。
+    suggest: [中心となる〇〇, 基盤, 全体が依存する〇〇]
+    keep_when: [体の背骨, ネットワークのバックボーン回線を説明するとき]
+    examples:
+      - bad: このライブラリがシステムの背骨になっている。
+        good: システムのほとんどのモジュールがこのライブラリに依存している。
+
+  - id: kokkaku
+    term: 骨格
+    yomi: こっかく
+    category: structure-metaphor
+    severity: warn
+    match:
+      literal: [骨格]
+      exclude: [骨格筋, 骨格標本]
+    why: skeleton の直訳。ひな形なのか、全体の構成なのか、主な処理の流れなのかが分からない。
+    suggest: [構成, ひな形, 全体の流れ, 主な処理]
+    keep_when: [体の骨格]
+    examples:
+      - bad: まずアプリの骨格を作る。
+        good: まずアプリの画面遷移とルーティングだけを作る。
+
+  - id: shinzobu
+    term: 心臓部
+    yomi: しんぞうぶ
+    category: structure-metaphor
+    severity: warn
+    match:
+      literal: [心臓部]
+    why: いちばん重要な部分だとたとえるだけで、何をしている部分なのかが書かれない。
+    suggest: [中心となる処理, 主な処理, 〇〇を行う部分]
+    keep_when: []
+    examples:
+      - bad: スケジューラがこのサービスの心臓部だ。
+        good: このサービスでは、スケジューラがすべてのジョブの実行順を決める。
+
+  - id: yataibone
+    term: 屋台骨
+    yomi: やたいぼね
+    category: structure-metaphor
+    severity: warn
+    match:
+      literal: [屋台骨]
+    why: 全体を支えるとたとえるだけで、何がどう支えているのかが書かれない。
+    suggest: [基盤, 中心となる〇〇, 全体が依存する〇〇]
+    keep_when: [会社や家計を支えるという慣用の意味（技術文書以外）]
+    examples:
+      - bad: 認証基盤がサービスの屋台骨を支えている。
+        good: すべてのサービスがこの認証基盤でログインを処理している。
 
   # ---- 硬い漢語 ----
   - id: tanpo
