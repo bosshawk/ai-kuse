@@ -23,7 +23,7 @@ categories:
   metaphor-noun: 比喩の名詞
 
 terms:
-  # ---- 役割を大げさに呼ぶ名詞 ----
+  # ---- 役割を大げさに呼ぶ名詞（inflated-noun）----
   - id: shohon
     term: 正本
     yomi: しょうほん
@@ -70,21 +70,6 @@ terms:
       - bad: この関数は入力が空でない契約になっている。
         good: この関数は空でない入力を受け取る前提で書かれている。
 
-  - id: gate
-    term: ゲート
-    category: inflated-noun
-    severity: info
-    evidence: {survey: 2026-11, ai: 1.83, human2021: 2.31, qiita2026: 4.04}
-    match:
-      literal: [ゲート]
-      exclude: [ゲートウェイ, ゲートキーパー]
-    why: 確認の段階を「ゲート」と呼ぶと、何を確かめて何を止めるのかが書かれないまま済んでしまう。
-    suggest: [チェック, 確認, 必須チェック（CI）]
-    keep_when: [品質ゲートのように定着した用語, ツールの機能名（Quality Gate など）]
-    examples:
-      - bad: レビューのゲートを通してからマージする。
-        good: レビューで承認を受けてからマージする。
-
   - id: shireito
     term: 司令塔
     yomi: しれいとう
@@ -99,6 +84,21 @@ terms:
     examples:
       - bad: この関数が司令塔になり、各処理を順に呼ぶ。
         good: この関数が各処理を順に呼ぶ。
+
+  - id: gate
+    term: ゲート
+    category: inflated-noun
+    severity: info
+    evidence: {survey: 2026-11, ai: 1.83, human2021: 2.31, qiita2026: 4.04}
+    match:
+      literal: [ゲート]
+      exclude: [ゲートウェイ, ゲートキーパー]
+    why: 確認の段階を「ゲート」と呼ぶと、何を確かめて何を止めるのかが書かれないまま済んでしまう。
+    suggest: [チェック, 確認, 必須チェック（CI）]
+    keep_when: [品質ゲートのように定着した用語, ツールの機能名（Quality Gate など）]
+    examples:
+      - bad: レビューのゲートを通してからマージする。
+        good: レビューで承認を受けてからマージする。
 
   - id: ichiji-joho
     term: 一次情報
@@ -115,7 +115,7 @@ terms:
       - bad: 必ず一次情報にあたって確認すること。
         good: 必ず公式ドキュメントで確認すること。
 
-  # ---- 文書の区切りの直訳 ----
+  # ---- 文書の区切りの直訳（doc-structure）----
   - id: setsu
     term: 節
     yomi: せつ
@@ -141,7 +141,7 @@ terms:
     term: 本稿
     yomi: ほんこう
     category: doc-structure
-    severity: info
+    severity: warn
     evidence: {survey: 2026-11, ai: 0.0, human2021: 1.82, qiita2026: 1.82}
     match:
       literal: [本稿]
@@ -152,7 +152,7 @@ terms:
       - bad: 本稿では導入手順を扱う。
         good: この記事では導入手順を扱う。
 
-  # ---- 比喩の動詞 ----
+  # ---- 比喩の動詞（metaphor-verb）----
   - id: yoseru
     term: 寄せる
     yomi: よせる
@@ -204,7 +204,7 @@ terms:
     term: 噛ませる
     yomi: かませる
     category: metaphor-verb
-    severity: info
+    severity: warn
     evidence: {survey: 2026-11, ai: 0.0, human2021: 0.14, qiita2026: 0.12}
     match:
       regex: ['噛ま(せ|す|し)', 'かませ(る|て|た|ます|れば)']
@@ -249,7 +249,7 @@ terms:
     term: 吸収する
     yomi: きゅうしゅう
     category: metaphor-verb
-    severity: info
+    severity: warn
     evidence: {survey: 2026-11, ai: 0.42, human2021: 0.71, qiita2026: 0.87}
     match:
       regex: ['吸収(する|し|さ|でき|させ)']
@@ -310,7 +310,162 @@ terms:
       - bad: CI でテストが落ちた。
         good: CI でテストが失敗した。
 
-  # ---- 英語の直訳語 ----
+  - id: kuzureru
+    term: 崩れる
+    yomi: くずれる
+    category: metaphor-verb
+    severity: warn
+    evidence: {survey: 2026-11, ai: 7.81, human2021: 0.3, qiita2026: 2.24}
+    match:
+      regex: ['崩れ(る|て|た|ま|ない|なかった|やす)']
+      exclude: [荷崩れ, 土砂崩れ, 崖崩れ, 煮崩れ, 型崩れ]
+      exclude_regex: ['(表示|レイアウト|画面|デザイン|体調|天気|天候)が崩れ']
+    why: 何がどう悪くなったのかを「崩れる」でまとめている。点数が下がったのか、前提が成り立たなくなったのか、失敗したのかが分からない。
+    suggest: [下がる, 成り立たなくなる, 失敗する, 当てはまらなくなる]
+    keep_when: [表示やレイアウトが崩れる]
+    examples:
+      - bad: 5 日目は崩れませんでした。
+        good: 5 日目は点数が下がりませんでした。
+
+  - id: kiku
+    term: 効く
+    yomi: きく
+    category: metaphor-verb
+    severity: warn
+    evidence: {survey: 2026-11, ai: 4.5, human2021: 0.12, qiita2026: 3.19, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 効く 2.0%→22.3%'}
+    match:
+      regex: ['(一番|いちばん|最も|特に|ここで|そこで|地味に|じわじわ|大きく)効(く|いて|き|いた)', '効いてくる', '効き目']
+    why: 何がどう良くなるのかを「効く」で済ませている。英語の what matters や pay off を写した言い方のことも多い。
+    suggest: [効果がある, 大事なのは, 速くなる, 〇〇が減る]
+    keep_when: [キャッシュが効く、薬が効くのような定着した言い方]
+    examples:
+      - bad: ここで効いてくるのが、名前の付け方です。
+        good: ここで大事なのは、名前の付け方です。
+
+  - id: nigasu
+    term: 逃がす
+    yomi: にがす
+    category: metaphor-verb
+    severity: warn
+    evidence: {survey: 2026-11, ai: 0.56, human2021: 0.0, qiita2026: 0.9}
+    match:
+      regex: ['逃が(す|し|さ|せ)']
+      exclude: [熱を逃が, 取り逃が, 見逃]
+    why: 処理を別の場所へ「逃がす」は、移すのか、振り分けるのかが分からない。
+    suggest: [移す, 振り分ける, 別のサーバーで処理する]
+    keep_when: [熱や湿気を逃がす]
+    examples:
+      - bad: ログインの処理を別サーバーに逃がす。
+        good: ログインの処理を別のサーバーに移す。
+
+  - id: mawasu
+    term: 回す
+    yomi: まわす
+    category: metaphor-verb
+    severity: info
+    evidence: {survey: 2026-11, ai: 11.54, human2021: 0.18, qiita2026: 1.22}
+    match:
+      regex: ['(テスト|CI|ジョブ|ループ|処理|ベンチ|検査|計測|測定|バッチ|PDCA|サイクル)を(回|まわ)(す|し|さ|せ)']
+    why: 実行するのか、繰り返すのかが分からない。
+    suggest: [実行する, 繰り返す, 定期的に実行する]
+    keep_when: []
+    examples:
+      - bad: 再起動の検査を回している。
+        good: 再起動の検査を実行している。
+
+  - id: hashiraseru
+    term: 走らせる
+    yomi: はしらせる
+    category: metaphor-verb
+    severity: info
+    evidence: {survey: 2026-11, ai: 4.36, human2021: 0.42, qiita2026: 3.29}
+    match:
+      regex: ['走らせ']
+    why: 実行することを走るにたとえている。
+    suggest: [実行する, 動かす]
+    keep_when: []
+    examples:
+      - bad: 負荷試験を走らせる。
+        good: 負荷試験を実行する。
+
+  - id: tsumaru
+    term: 詰まる
+    yomi: つまる
+    category: metaphor-verb
+    severity: info
+    evidence: {survey: 2026-11, ai: 5.84, human2021: 0.55, qiita2026: 1.57}
+    match:
+      regex: ['(が|で)詰ま(る|り|っ)', '詰まりどころ']
+    why: 止まったのか、遅くなったのか、何が待たされているのかが分からない。
+    suggest: [止まる, 遅くなる, 待たされる, 進まなくなる]
+    keep_when: [配管や紙が物理的に詰まるとき]
+    examples:
+      - bad: 書き込みが詰まっている。
+        good: 書き込みがロックの解放を待っている。
+
+  - id: kowareru
+    term: 壊れる
+    yomi: こわれる
+    category: metaphor-verb
+    severity: info
+    evidence: {survey: 2026-11, ai: 7.6, human2021: 0.78, qiita2026: 5.63, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 壊れる 0.8%→13.1%'}
+    match:
+      regex: ['壊れ(る|て|た|ま|ない|なかった|やす)']
+      exclude_regex: ['(画面|機械|端末|ディスク|HDD|SSD|PC|パソコン)が壊れ']
+    why: データやシステムが「壊れる」は、使えなくなったのか、値がおかしくなったのか、整合性が失われたのかが分からない。
+    suggest: [おかしくなる, 使えなくなる, 整合性が失われる, 動かなくなる]
+    keep_when: [機器が物理的に壊れるとき]
+    examples:
+      - bad: 同時に書き込むと集計が壊れる。
+        good: 同時に書き込むと集計の値が実際の件数と合わなくなる。
+
+  - id: fusagu
+    term: 塞ぐ
+    yomi: ふさぐ
+    category: metaphor-verb
+    severity: info
+    evidence: {survey: 2026-11, ai: 1.13, human2021: 0.07, qiita2026: 0.85}
+    match:
+      regex: ['塞(ぐ|い|が|げ)']
+    why: 何をどう防ぐのかを、穴を塞ぐたとえで済ませている。
+    suggest: [防ぐ, 対策する, 修正する, 拒否する]
+    keep_when: [脆弱性を修正することを「穴を塞ぐ」と言う定着した言い方]
+    examples:
+      - bad: この経路を塞ぐ。
+        good: この経路からの要求を拒否する。
+
+  - id: mazaru
+    term: 混ざる
+    yomi: まざる
+    category: metaphor-verb
+    severity: info
+    evidence: {survey: 2026-11, ai: 3.02, human2021: 0.69, qiita2026: 2.64}
+    match:
+      regex: ['混ざ(る|り|っ|ら)']
+    why: 何がどこに入り込むのかが書かれないことが多い。
+    suggest: [入り込む, 混入する, 一緒に出力される]
+    keep_when: [液体などが文字どおり混ざるとき]
+    examples:
+      - bad: 本番のデータに試験用の行が混ざる。
+        good: 本番のテーブルに試験用の行が入り込む。
+
+  - id: tsubusu
+    term: 潰す
+    yomi: つぶす
+    category: metaphor-verb
+    severity: info
+    evidence: {survey: 2026-11, ai: 0.42, human2021: 0.07, qiita2026: 0.52}
+    match:
+      regex: ['(を|が)潰(す|し|さ|せ)']
+      exclude: [時間を潰, 顔を潰]
+    why: バグや課題を「潰す」は、直したのか、消したのか、回避したのかが分からない。
+    suggest: [直す, 解消する, 取り除く]
+    keep_when: []
+    examples:
+      - bad: 残っている課題を潰す。
+        good: 残っている課題を解消する。
+
+  # ---- 英語の直訳語（calque）----
   - id: mon
     term: 門
     yomi: もん
@@ -345,21 +500,6 @@ terms:
     examples:
       - bad: 公開 API の表面積を小さく保つ。
         good: 公開する API の数を少なく保つ。
-
-  - id: ikkyu-shimin
-    term: 一級市民
-    yomi: いっきゅうしみん
-    category: calque
-    severity: warn
-    evidence: {survey: 2026-11, ai: 0.07, human2021: 0.0, qiita2026: 0.0}
-    match:
-      literal: [一級市民, 第一級市民]
-    why: first-class citizen の直訳。標準で扱える、という意味で使われることが多い。
-    suggest: [標準で対応する, 第一級オブジェクト（言語仕様の用語）]
-    keep_when: []
-    examples:
-      - bad: このフレームワークでは型が一級市民として扱われる。
-        good: このフレームワークは型を標準で扱える。
 
   - id: haikan
     term: 配管
@@ -421,11 +561,120 @@ terms:
       - bad: 導入時の摩擦を減らす。
         good: 導入の手順を減らす。
 
+  - id: honsen
+    term: 本線
+    yomi: ほんせん
+    category: calque
+    severity: warn
+    evidence: {survey: 2026-11, ai: 37.14, human2021: 0.02, qiita2026: 0.02}
+    match:
+      literal: [本線]
+    why: mainline の直訳。main ブランチなのか、本番に出している版なのかが分からない。
+    suggest: [main ブランチ, 現行の版, 本番に出している版]
+    keep_when: [鉄道・道路の本線]
+    examples:
+      - bad: この変更はまだ本線に入っていない。
+        good: この変更はまだ main ブランチにマージしていない。
+
+  - id: jumyo
+    term: 寿命
+    yomi: じゅみょう
+    category: calque
+    severity: warn
+    evidence: {survey: 2026-11, ai: 6.68, human2021: 0.25, qiita2026: 0.62}
+    match:
+      literal: [寿命]
+      exclude: [電池の寿命, バッテリーの寿命, 製品寿命, 平均寿命]
+    why: lifetime の直訳。トークンや接続には「有効期間」という定着した言い方がある。
+    suggest: [有効期間, 存続期間, TTL, 保持期間]
+    keep_when: [製品・部品・電池の寿命]
+    examples:
+      - bad: JWT の寿命を 5 分にする。
+        good: JWT の有効期間を 5 分にする。
+
+  - id: iriguchi
+    term: 入口
+    yomi: いりぐち
+    category: calque
+    severity: warn
+    evidence: {survey: 2026-11, ai: 9.43, human2021: 0.35, qiita2026: 6.63, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 入口 0.4%→6.8%'}
+    match:
+      regex: ['入り?口']
+      exclude: [駅の入口, 建物の入口, 入口付近, 出入口, 出入り口]
+    why: 実物の名前の代わりに場所のたとえを使っている。エンドポイントなのか、呼び出し元なのか、画面なのかが分からない。
+    suggest: [エンドポイント, 呼び出し元, 受け付ける処理, 画面]
+    keep_when: [建物や駅の入口]
+    examples:
+      - bad: 3 つの入口から同じ関数が呼ばれる。
+        good: Web 画面、公開 API、MCP の 3 か所から同じ関数が呼ばれる。
+
+  - id: shizukani
+    term: 静かに・黙って
+    yomi: しずかに・だまって
+    category: calque
+    severity: warn
+    evidence: {survey: 2026-11, ai: 0.77, human2021: 0.02, qiita2026: 0.37, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 静か 0.1%→4.9%、黙って 0.1%→3.4%'}
+    match:
+      regex: ['(静かに|黙って|無言で)(失敗|壊|落ち|無視|消え|捨て|上書|止ま|通|切れ|変わ)']
+    why: silently の直訳。システムに人の様子を当てている。通知もエラーも出ずに起きる、という意味なら、そう書く。
+    suggest: [気づかないうちに, エラーを出さずに, 通知なしで, ログを残さずに]
+    keep_when: [人や物の様子を文字どおりに書くとき]
+    examples:
+      - bad: 型が合わないと、値が黙って捨てられる。
+        good: 型が合わないと、値はエラーを出さずに捨てられる。
+      - bad: 設定を間違えるとデータが静かに壊れる。
+        good: 設定を間違えると、気づかないうちにデータがおかしくなる。
+
+  - id: mihari
+    term: 見張る
+    yomi: みはる
+    category: calque
+    severity: warn
+    evidence: {survey: 2026-11, ai: 4.85, human2021: 0.02, qiita2026: 0.2}
+    match:
+      literal: [見張]
+    why: watch / watcher の直訳。システムには「監視」という定着した言い方がある。
+    suggest: [監視する, 定期的に確かめる, watcher]
+    keep_when: [人が見張りに立つとき]
+    examples:
+      - bad: CI の結果を見張る。
+        good: CI の結果を監視する。
+
+  - id: mado
+    term: 窓（時間）
+    yomi: まど
+    category: calque
+    severity: warn
+    evidence: {survey: 2026-11, ai: 0.77, human2021: 0.0, qiita2026: 0.07}
+    match:
+      regex: ['([0-9０-９]+\s*(分|秒|時間|日|週)|時間|期間|メンテナンス|投稿|集計|受付)の窓', '時間窓']
+    why: time window の直訳。時間帯や期間と書けば足りる。
+    suggest: [時間帯, 期間, 〇時から〇時まで]
+    keep_when: []
+    examples:
+      - bad: 5 分の窓で集計する。
+        good: 5 分ごとに集計する。
+
+  - id: ban
+    term: 版（バージョン）
+    yomi: はん
+    category: calque
+    severity: warn
+    evidence: {survey: 2026-11, ai: 2.74, human2021: 0.07, qiita2026: 0.1}
+    match:
+      regex: ['(この|新しい|古い|前の|次の|最新の|今の|手元の|直した|修正した)版']
+    why: version の直訳。ソフトウェアではバージョンと書くのが定着している。
+    suggest: [バージョン, リリース, コミット]
+    keep_when: [書籍の版（第2版）, 日本語版・無料版のような製品の版]
+    examples:
+      - bad: 手元の版を新しくしてから、もう一度試してください。
+        good: 手元のバージョンを新しくしてから、もう一度試してください。
+
   - id: eisei
     term: 衛生
     yomi: えいせい
     category: calque
-    severity: warn
+    severity: info
     evidence: {survey: 2026-11, ai: 0.07, human2021: 0.09, qiita2026: 0.25}
     match:
       literal: [衛生]
@@ -452,69 +701,85 @@ terms:
       - bad: このクラスの責務はログの書き出しです。
         good: このクラスはログを書き出します。
 
-  # ---- 構造を体や建物にたとえる名詞 ----
-  - id: sebone
-    term: 背骨
-    yomi: せぼね
-    category: structure-metaphor
-    severity: warn
-    evidence: {survey: 2026-11, ai: 0.0, human2021: 0.0, qiita2026: 0.02}
+  - id: zendan
+    term: 前段・後段
+    yomi: ぜんだん・こうだん
+    category: calque
+    severity: info
+    evidence: {survey: 2026-11, ai: 3.1, human2021: 0.12, qiita2026: 0.9}
     match:
-      literal: [背骨]
-    why: backbone の直訳。何が全体を支えているのか、何に依存しているのかが書かれない。
-    suggest: [中心となる〇〇, 基盤, 全体が依存する〇〇]
-    keep_when: [体の背骨, ネットワークのバックボーン回線を説明するとき]
+      regex: ['(前|後)段(で|に|の|へ|を)']
+      exclude_regex: ['(第[0-9０-９一二三四五六七八九十]+[条項号]|項)(前|後)段']
+    why: 処理の順番を段にたとえている。どの処理の前か後かが書かれない。
+    suggest: [前の処理, 後の処理, 〇〇の前, 〇〇の後]
+    keep_when: [法令の条文の前段・後段]
     examples:
-      - bad: このライブラリがシステムの背骨になっている。
-        good: システムのほとんどのモジュールがこのライブラリに依存している。
+      - bad: 前段で PKCE の値を検査する。
+        good: トークンを発行する前に PKCE の値を検査する。
 
-  - id: kokkaku
-    term: 骨格
-    yomi: こっかく
-    category: structure-metaphor
-    severity: warn
-    evidence: {survey: 2026-11, ai: 0.84, human2021: 0.16, qiita2026: 1.17}
+  - id: jouryu
+    term: 上流・下流
+    yomi: じょうりゅう・かりゅう
+    category: calque
+    severity: info
+    evidence: {survey: 2026-11, ai: 2.39, human2021: 0.21, qiita2026: 0.7}
     match:
-      literal: [骨格]
-      exclude: [骨格筋, 骨格標本]
-    why: skeleton の直訳。ひな形なのか、全体の構成なのか、主な処理の流れなのかが分からない。
-    suggest: [構成, ひな形, 全体の流れ, 主な処理]
-    keep_when: [体の骨格]
+      regex: ['(上|下)流(の|に|で|へ|側|から)']
+    why: upstream / downstream の直訳。呼び出し先なのか、後続の処理なのかが分からないことがある。
+    suggest: [呼び出し先, 呼び出し元, 後続の処理, 転送先]
+    keep_when: [nginx の upstream のように定着した用語, 開発工程の上流・下流, 河川]
     examples:
-      - bad: まずアプリの骨格を作る。
-        good: まずアプリの画面遷移とルーティングだけを作る。
+      - bad: 下流の API のレート制限に当たる。
+        good: 転送先の API のレート制限に当たる。
 
-  - id: shinzobu
-    term: 心臓部
-    yomi: しんぞうぶ
-    category: structure-metaphor
-    severity: warn
-    evidence: {survey: 2026-11, ai: 0.0, human2021: 0.02, qiita2026: 0.32}
+  - id: shunkan
+    term: 瞬間
+    yomi: しゅんかん
+    category: calque
+    severity: info
+    evidence: {survey: 2026-11, ai: 1.62, human2021: 0.6, qiita2026: 4.93, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 瞬間 0.9%→13.7%'}
     match:
-      literal: [心臓部]
-    why: いちばん重要な部分だとたとえるだけで、何をしている部分なのかが書かれない。
-    suggest: [中心となる処理, 主な処理, 〇〇を行う部分]
-    keep_when: []
+      regex: ['(た|る|す|く)瞬間']
+    why: the moment の直訳として「〜した瞬間」を多用する形。時間の短さを強調する必要がなければ、時点やきっかけを書く。
+    suggest: [〜するとすぐ, 〜した時点で, 〜すると]
+    keep_when: [一瞬であることを伝える必要があるとき]
     examples:
-      - bad: スケジューラがこのサービスの心臓部だ。
-        good: このサービスでは、スケジューラがすべてのジョブの実行順を決める。
+      - bad: トークンが失効した瞬間に、すべての要求が失敗する。
+        good: トークンが失効すると、すべての要求が失敗する。
 
-  - id: yataibone
-    term: 屋台骨
-    yomi: やたいぼね
-    category: structure-metaphor
-    severity: warn
-    evidence: {survey: 2026-11, ai: 0.0, human2021: 0.0, qiita2026: 0.0}
+  - id: kyokai
+    term: 境界
+    yomi: きょうかい
+    category: calque
+    severity: info
+    evidence: {survey: 2026-11, ai: 3.8, human2021: 2.14, qiita2026: 8.65, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 境界 1.0%→12.8%'}
     match:
-      literal: [屋台骨]
-    why: 全体を支えるとたとえるだけで、何がどう支えているのかが書かれない。
-    suggest: [基盤, 中心となる〇〇, 全体が依存する〇〇]
-    keep_when: [会社や家計を支えるという慣用の意味（技術文書以外）]
+      literal: [境界]
+      exclude: [境界値, 境界線]
+    why: boundary の訳。何と何を区別しているのかが書かれないまま使われることがある。
+    suggest: [〇〇と〇〇の区別, 範囲, 分け方]
+    keep_when: [信頼境界・境界値テストなど定着した用語, パッケージやモジュールの境界を説明するとき]
     examples:
-      - bad: 認証基盤がサービスの屋台骨を支えている。
-        good: すべてのサービスがこの認証基盤でログインを処理している。
+      - bad: この設計では境界があいまいになる。
+        good: この設計では、どの処理を API 側で行うかがあいまいになる。
 
-  # ---- 硬い漢語 ----
+  - id: hiku
+    term: 引く（参照）
+    yomi: ひく
+    category: calque
+    severity: info
+    evidence: {survey: 2026-11, ai: 7.25, human2021: 0.9, qiita2026: 1.47}
+    match:
+      regex: ['(から|を)引(く|い|け)']
+      exclude: [線を引, 差し引, 割り引, 取り引, 手を引, 風邪を引, 辞書を引, 気を引, 注意を引, 幕を引]
+    why: 値や仕様を「引く」は、参照するのか、取得するのか、呼び出すのかが分からない。
+    suggest: [参照する, 取得する, 読み込む, 呼び出す]
+    keep_when: [辞書を引く、線を引くなど定着した言い方]
+    examples:
+      - bad: 設定ファイルから値を引く。
+        good: 設定ファイルから値を読み込む。
+
+  # ---- 硬い漢語（stiff-kango）----
   - id: tanpo
     term: 担保
     yomi: たんぽ
@@ -530,7 +795,67 @@ terms:
       - bad: テストで品質を担保する。
         good: リリース前に全テストを通して、既存の機能が壊れていないことを確かめる。
 
-  # ---- 評価の決まり文句 ----
+  - id: kitei
+    term: 既定
+    yomi: きてい
+    category: stiff-kango
+    severity: info
+    evidence: {survey: 2026-11, ai: 65.84, human2021: 0.81, qiita2026: 4.64, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 既定 0.5%→7.1%'}
+    match:
+      literal: [既定]
+    why: default の訳語。Microsoft 製品の文書では定着しているが、Web の技術文書ではデフォルトや初期値と書くことが多い。
+    suggest: [デフォルト, 初期値, 何も指定しないとき]
+    keep_when: [Microsoft 製品の用語（既定のブラウザ）, 法令]
+    examples:
+      - bad: 既定ではオフになっている。
+        good: デフォルトではオフになっている。
+
+  - id: jissoku
+    term: 実測
+    yomi: じっそく
+    category: stiff-kango
+    severity: info
+    evidence: {survey: 2026-11, ai: 8.86, human2021: 0.37, qiita2026: 4.19, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 実測 0.1%→9.4%'}
+    match:
+      literal: [実測]
+    why: 「実測では」のように、何をどの条件で測ったのかを書かずに数値の確かさだけを示す形が多い。
+    suggest: [測定した値, 実際に測った, 〇〇の条件で測った]
+    keep_when: [測量、測定の方法を説明するとき]
+    examples:
+      - bad: 実測では 1/7 になった。
+        good: 手元のベンチで測ると、処理時間が 1/7 になった。
+
+  - id: shisa
+    term: 示唆
+    yomi: しさ
+    category: stiff-kango
+    severity: info
+    evidence: {survey: 2026-11, ai: 0.28, human2021: 0.21, qiita2026: 0.77}
+    match:
+      regex: ['示唆(する|し|さ|が|を|は|的)']
+    why: 何を根拠に、どの程度そう言えるのかが書かれないまま、可能性だけを述べる形が多い。
+    suggest: [〜と考えられる, 〜を示す, 〜の可能性がある]
+    keep_when: [論文]
+    examples:
+      - bad: 同じ API を共有している可能性を示唆する。
+        good: ログの形式が同じなので、同じ API を共有している可能性がある。
+
+  - id: dantei
+    term: 断定
+    yomi: だんてい
+    category: stiff-kango
+    severity: info
+    evidence: {survey: 2026-11, ai: 0.42, human2021: 0.14, qiita2026: 1.05, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 断定 0.08%→2.4%'}
+    match:
+      literal: [断定]
+    why: 「〜とは断定できません」の形が多い。何が分かっていて何が分からないのかを書く。
+    suggest: [言い切る, 〜とは限らない, 〜かどうかは分かっていない]
+    keep_when: []
+    examples:
+      - bad: 原因がキャッシュだとは断定できません。
+        good: 原因がキャッシュかどうかは、まだ分かっていません。
+
+  # ---- 評価の決まり文句（cliche）----
   - id: kandokoro
     term: 勘所
     yomi: かんどころ
@@ -577,21 +902,6 @@ terms:
       - bad: よくある落とし穴を紹介する。
         good: よくある間違いを紹介する。
 
-  - id: sunao
-    term: 素直な
-    yomi: すなおな
-    category: cliche
-    severity: info
-    evidence: {survey: 2026-11, ai: 0.0, human2021: 0.12, qiita2026: 0.32}
-    match:
-      regex: ['素直(な|に)(実装|書|作|考え|使|設計|方法|やり方)']
-    why: 「素直な実装」は、単純なのか、標準的なのか、遠回りしないのかが分からない。
-    suggest: [単純な, 標準的な, そのままの]
-    keep_when: []
-    examples:
-      - bad: まずは素直な実装で始める。
-        good: まずは単純な実装で始める。
-
   - id: suji
     term: 筋がいい
     yomi: すじがいい
@@ -606,23 +916,6 @@ terms:
     examples:
       - bad: この設計は筋がいい。
         good: この設計は機能を足すときに変更する箇所が少ない。
-
-  - id: kaizodo
-    term: 解像度
-    yomi: かいぞうど
-    category: cliche
-    severity: warn
-    evidence: {survey: 2026-11, ai: 1.41, human2021: 4.04, qiita2026: 1.2}
-    match:
-      literal: [解像度]
-      exclude: [画面解像度, 画像解像度, ディスプレイの解像度, 画面の解像度, 画像の解像度, 解像度不明, 解像度の設定]
-      exclude_regex: ['解像度\s*[・/／]\s*階調', '解像度\s*[0-9０-９]', '[0-9０-９]+\s*(dpi|ppi|px)']
-    why: 「解像度を上げる」は、何を具体的にするのかが書かれない。
-    suggest: [詳しくする, 具体的にする, 細かく分ける]
-    keep_when: [画像・画面・センサー・スキャナの解像度]
-    examples:
-      - bad: 要件の解像度を上げる。
-        good: 要件を画面ごとに具体的にする。
 
   - id: ondokan
     term: 温度感
@@ -654,6 +947,68 @@ terms:
       - bad: 遅延への打ち手を考える。
         good: 遅延への対策を考える。
 
+  - id: honmei
+    term: 本命
+    yomi: ほんめい
+    category: cliche
+    severity: warn
+    evidence: {survey: 2026-11, ai: 1.34, human2021: 0.05, qiita2026: 0.4}
+    match:
+      literal: [本命]
+    why: 競馬の言い方を借りた評価。どの点でその案がよいのかが書かれない。
+    suggest: [第一候補, 推奨する案, 最も有力な案]
+    keep_when: []
+    examples:
+      - bad: 書き込みが頭打ちなので、COPY を使う案が本命です。
+        good: 書き込みが上限に達しているので、COPY を使う案を第一候補にします。
+
+  - id: mitate
+    term: 見立て
+    yomi: みたて
+    category: cliche
+    severity: warn
+    evidence: {survey: 2026-11, ai: 4.92, human2021: 0.23, qiita2026: 0.85}
+    match:
+      literal: [見立て]
+    why: 誰がどの根拠で判断したのかが書かれないまま、判断だけが述べられる。
+    suggest: [予想, 推定, 〇〇の考え（判断した人を書く）]
+    keep_when: [医師の見立てなど、判断した人が明らかなとき]
+    examples:
+      - bad: 前回の見立ては、3 リージョンとも 100 人で上限に達するというものだった。
+        good: 前回は、3 リージョンとも 100 人で上限に達すると予想していた。
+
+  - id: sunao
+    term: 素直な
+    yomi: すなおな
+    category: cliche
+    severity: info
+    evidence: {survey: 2026-11, ai: 0.0, human2021: 0.12, qiita2026: 0.32}
+    match:
+      regex: ['素直(な|に)(実装|書|作|考え|使|設計|方法|やり方)']
+    why: 「素直な実装」は、単純なのか、標準的なのか、遠回りしないのかが分からない。
+    suggest: [単純な, 標準的な, そのままの]
+    keep_when: []
+    examples:
+      - bad: まずは素直な実装で始める。
+        good: まずは単純な実装で始める。
+
+  - id: kaizodo
+    term: 解像度
+    yomi: かいぞうど
+    category: cliche
+    severity: info
+    evidence: {survey: 2026-11, ai: 1.41, human2021: 4.04, qiita2026: 1.2}
+    match:
+      literal: [解像度]
+      exclude: [画面解像度, 画像解像度, ディスプレイの解像度, 画面の解像度, 画像の解像度, 解像度不明, 解像度の設定]
+      exclude_regex: ['解像度\s*[・/／]\s*階調', '解像度\s*[0-9０-９]', '[0-9０-９]+\s*(dpi|ppi|px)']
+    why: 「解像度を上げる」は、何を具体的にするのかが書かれない。
+    suggest: [詳しくする, 具体的にする, 細かく分ける]
+    keep_when: [画像・画面・センサー・スキャナの解像度]
+    examples:
+      - bad: 要件の解像度を上げる。
+        good: 要件を画面ごとに具体的にする。
+
   - id: handanjiku
     term: 判断軸
     yomi: はんだんじく
@@ -669,22 +1024,205 @@ terms:
       - bad: ライブラリを選ぶ判断軸を決める。
         good: ライブラリを選ぶ基準を決める。
 
-  # ---- 2026-11 の調査で足した語（research/2026-11-term-survey） ----
-  - id: honsen
-    term: 本線
-    yomi: ほんせん
-    category: calque
-    severity: warn
-    evidence: {survey: 2026-11, ai: 37.14, human2021: 0.02, qiita2026: 0.02}
+  - id: zenbuiri
+    term: 全部入り
+    yomi: ぜんぶいり
+    category: cliche
+    severity: info
+    evidence: {survey: 2026-11, ai: 3.24, human2021: 0.09, qiita2026: 0.27}
     match:
-      literal: [本線]
-    why: mainline の直訳。main ブランチなのか、本番に出している版なのかが分からない。
-    suggest: [main ブランチ, 現行の版, 本番に出している版]
-    keep_when: [鉄道・道路の本線]
+      literal: [全部入り]
+    why: どの機能や変更を入れたものかが書かれない。
+    suggest: [すべてを組み合わせた版, 全機能を入れた構成]
+    keep_when: []
     examples:
-      - bad: この変更はまだ本線に入っていない。
-        good: この変更はまだ main ブランチにマージしていない。
+      - bad: 全部入りの版で正しさを確かめる。
+        good: すべての変更を組み合わせた版で正しさを確かめる。
 
+  - id: teiseki
+    term: 定石
+    yomi: じょうせき
+    category: cliche
+    severity: info
+    evidence: {survey: 2026-11, ai: 1.2, human2021: 0.14, qiita2026: 0.67, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 定石 0.1%→1.8%'}
+    match:
+      literal: [定石]
+    why: 囲碁の言い方を借りた評価。何が標準的なのかが書かれない。
+    suggest: [よく使われるやり方, 標準的な方法]
+    keep_when: [囲碁]
+    examples:
+      - bad: 全部オンメモリにするのが定石だ。
+        good: データをすべてメモリに載せる方法がよく使われる。
+
+  - id: fukabori
+    term: 深掘り
+    yomi: ふかぼり
+    category: cliche
+    severity: info
+    evidence: {survey: 2026-11, ai: 1.13, human2021: 1.2, qiita2026: 2.89}
+    match:
+      literal: [深掘, 深堀]
+    why: 何をどこまで調べるのかが書かれない。
+    suggest: [詳しく調べる, 原因を調べる]
+    keep_when: []
+    examples:
+      - bad: 遅延の原因を深掘りする。
+        good: 遅延の原因を詳しく調べる。
+
+  - id: tsukiawase
+    term: 突き合わせる
+    yomi: つきあわせる
+    category: cliche
+    severity: info
+    evidence: {survey: 2026-11, ai: 3.17, human2021: 0.09, qiita2026: 1.52, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 突き合わせる 0.06%→3.7%'}
+    match:
+      literal: [突き合わせ, 突合]
+    why: 確認の言い回しとして多用される。何と何を比べて、何を確かめるのかを書く。
+    suggest: [見比べる, 比べる, 〇〇と一致するか確かめる]
+    keep_when: [会計の突合のように業務の用語として使うとき]
+    examples:
+      - bad: ログと設定を突き合わせる。
+        good: ログに出た接続先が、設定の接続先と一致するかを確かめる。
+
+  - id: torichigae
+    term: 取り違える
+    yomi: とりちがえる
+    category: cliche
+    severity: info
+    evidence: {survey: 2026-11, ai: 4.99, human2021: 0.14, qiita2026: 0.7}
+    match:
+      literal: [取り違え]
+    why: 何を何と間違えたのかが書かれないことが多い。
+    suggest: [〇〇を〇〇と間違える, 順序を間違える]
+    keep_when: []
+    examples:
+      - bad: 再起動の順番の取り違えで、書き込みが消える。
+        good: DB より先にアプリを再起動すると、書き込みが消える。
+
+  - id: utagau
+    term: 疑う
+    yomi: うたがう
+    category: cliche
+    severity: info
+    evidence: {survey: 2026-11, ai: 2.39, human2021: 0.71, qiita2026: 2.42}
+    match:
+      regex: ['疑(う|い|っ|わ)']
+      exclude: [疑問, 疑似, 容疑, 質疑, 懐疑, 半信半疑]
+    why: 「〜を疑う」は、何を確かめるのかが書かれない。
+    suggest: [確かめる, 原因として考える, 念のため見直す]
+    keep_when: []
+    examples:
+      - bad: まずネットワークを疑う。
+        good: まずネットワークの遅延を測る。
+
+  - id: jitsugai
+    term: 実害
+    yomi: じつがい
+    category: cliche
+    severity: info
+    evidence: {survey: 2026-11, ai: 0.42, human2021: 0.02, qiita2026: 0.3}
+    match:
+      literal: [実害]
+    why: 「実害はない」で済ませると、何が起きて何が起きないのかが書かれない。
+    suggest: [実際の影響, 利用者への影響, 〇〇は起きない]
+    keep_when: []
+    examples:
+      - bad: 今のところ実害はない。
+        good: 今のところ、利用者の画面には影響が出ていない。
+
+  - id: ketachigai
+    term: 桁違い
+    yomi: けたちがい
+    category: cliche
+    severity: info
+    evidence: {survey: 2026-11, ai: 0.35, human2021: 0.07, qiita2026: 0.25}
+    match:
+      literal: [桁違い]
+    why: どれだけ違うのかを、数値ではなく評価の語で書いている。
+    suggest: [〇倍, はるかに大きい, 1桁多い（実際に1桁なら）]
+    keep_when: []
+    examples:
+      - bad: 処理速度が桁違いに速い。
+        good: 処理時間が 1/12 になった。
+
+  - id: hatan
+    term: 破綻
+    yomi: はたん
+    category: cliche
+    severity: info
+    evidence: {survey: 2026-11, ai: 0.49, human2021: 0.55, qiita2026: 2.32, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 破綻 0.2%→2.7%'}
+    match:
+      literal: [破綻]
+    why: どの程度うまくいかなくなるのかが書かれず、状態だけが強く言われる。
+    suggest: [うまくいかなくなる, 成り立たなくなる, 〇〇が失敗する]
+    keep_when: [経営破綻など文字どおりの意味]
+    examples:
+      - bad: この設計は利用者が増えると破綻します。
+        good: この設計では、利用者が 1 万人を超えると応答が 3 秒を超えます。
+
+  - id: betsumono
+    term: 別物
+    yomi: べつもの
+    category: cliche
+    severity: info
+    evidence: {survey: 2026-11, ai: 0.7, human2021: 0.74, qiita2026: 2.42, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 別物 0.4%→5.5%'}
+    match:
+      literal: [別物]
+    why: どう違うのかを書かずに、違うことだけを強く言う。
+    suggest: [まったく違うもの, 〇〇が違う]
+    keep_when: []
+    examples:
+      - bad: 認証と認可は別物です。
+        good: 認証は相手が誰かを確かめ、認可はその相手に何を許すかを決めます。
+
+  # ---- 構造を体や建物にたとえる名詞（structure-metaphor）----
+  - id: sebone
+    term: 背骨
+    yomi: せぼね
+    category: structure-metaphor
+    severity: warn
+    evidence: {survey: 2026-11, ai: 0.0, human2021: 0.0, qiita2026: 0.02}
+    match:
+      literal: [背骨]
+    why: backbone の直訳。何が全体を支えているのか、何に依存しているのかが書かれない。
+    suggest: [中心となる〇〇, 基盤, 全体が依存する〇〇]
+    keep_when: [体の背骨, ネットワークのバックボーン回線を説明するとき]
+    examples:
+      - bad: このライブラリがシステムの背骨になっている。
+        good: システムのほとんどのモジュールがこのライブラリに依存している。
+
+  - id: kokkaku
+    term: 骨格
+    yomi: こっかく
+    category: structure-metaphor
+    severity: warn
+    evidence: {survey: 2026-11, ai: 0.84, human2021: 0.16, qiita2026: 1.17}
+    match:
+      literal: [骨格]
+      exclude: [骨格筋, 骨格標本]
+    why: skeleton の直訳。ひな形なのか、全体の構成なのか、主な処理の流れなのかが分からない。
+    suggest: [構成, ひな形, 全体の流れ, 主な処理]
+    keep_when: [体の骨格]
+    examples:
+      - bad: まずアプリの骨格を作る。
+        good: まずアプリの画面遷移とルーティングだけを作る。
+
+  - id: shinzobu
+    term: 心臓部
+    yomi: しんぞうぶ
+    category: structure-metaphor
+    severity: warn
+    evidence: {survey: 2026-11, ai: 0.0, human2021: 0.02, qiita2026: 0.32}
+    match:
+      literal: [心臓部]
+    why: いちばん重要な部分だとたとえるだけで、何をしている部分なのかが書かれない。
+    suggest: [中心となる処理, 主な処理, 〇〇を行う部分]
+    keep_when: []
+    examples:
+      - bad: スケジューラがこのサービスの心臓部だ。
+        good: このサービスでは、スケジューラがすべてのジョブの実行順を決める。
+
+  # ---- 比喩の名詞（metaphor-noun）----
   - id: tenjo
     term: 天井
     yomi: てんじょう
@@ -716,68 +1254,6 @@ terms:
       - bad: 更新が終わったら hub へ合図を出す。
         good: 更新が終わったら hub へ通知を送る。
 
-  - id: jumyo
-    term: 寿命
-    yomi: じゅみょう
-    category: calque
-    severity: warn
-    evidence: {survey: 2026-11, ai: 6.68, human2021: 0.25, qiita2026: 0.62}
-    match:
-      literal: [寿命]
-      exclude: [電池の寿命, バッテリーの寿命, 製品寿命, 平均寿命]
-    why: lifetime の直訳。トークンや接続には「有効期間」という定着した言い方がある。
-    suggest: [有効期間, 存続期間, TTL, 保持期間]
-    keep_when: [製品・部品・電池の寿命]
-    examples:
-      - bad: JWT の寿命を 5 分にする。
-        good: JWT の有効期間を 5 分にする。
-
-  - id: honmei
-    term: 本命
-    yomi: ほんめい
-    category: cliche
-    severity: warn
-    evidence: {survey: 2026-11, ai: 1.34, human2021: 0.05, qiita2026: 0.4}
-    match:
-      literal: [本命]
-    why: 競馬の言い方を借りた評価。どの点でその案がよいのかが書かれない。
-    suggest: [第一候補, 推奨する案, 最も有力な案]
-    keep_when: []
-    examples:
-      - bad: 書き込みが頭打ちなので、COPY を使う案が本命です。
-        good: 書き込みが上限に達しているので、COPY を使う案を第一候補にします。
-
-  - id: iriguchi
-    term: 入口
-    yomi: いりぐち
-    category: calque
-    severity: warn
-    evidence: {survey: 2026-11, ai: 9.43, human2021: 0.35, qiita2026: 6.63, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 入口 0.4%→6.8%'}
-    match:
-      regex: ['入り?口']
-      exclude: [駅の入口, 建物の入口, 入口付近, 出入口, 出入り口]
-    why: 実物の名前の代わりに場所のたとえを使っている。エンドポイントなのか、呼び出し元なのか、画面なのかが分からない。
-    suggest: [エンドポイント, 呼び出し元, 受け付ける処理, 画面]
-    keep_when: [建物や駅の入口]
-    examples:
-      - bad: 3 つの入口から同じ関数が呼ばれる。
-        good: Web 画面、公開 API、MCP の 3 か所から同じ関数が呼ばれる。
-
-  - id: mitate
-    term: 見立て
-    yomi: みたて
-    category: cliche
-    severity: warn
-    evidence: {survey: 2026-11, ai: 4.92, human2021: 0.23, qiita2026: 0.85}
-    match:
-      literal: [見立て]
-    why: 誰がどの根拠で判断したのかが書かれないまま、判断だけが述べられる。
-    suggest: [予想, 推定, 〇〇の考え（判断した人を書く）]
-    keep_when: [医師の見立てなど、判断した人が明らかなとき]
-    examples:
-      - bad: 前回の見立ては、3 リージョンとも 100 人で上限に達するというものだった。
-        good: 前回は、3 リージョンとも 100 人で上限に達すると予想していた。
-
   - id: doukyo
     term: 同居
     yomi: どうきょ
@@ -792,54 +1268,6 @@ terms:
     examples:
       - bad: app と DB を同居させる。
         good: app と DB を同じサーバーで動かす。
-
-  - id: kuzureru
-    term: 崩れる
-    yomi: くずれる
-    category: metaphor-verb
-    severity: warn
-    evidence: {survey: 2026-11, ai: 7.81, human2021: 0.3, qiita2026: 2.24}
-    match:
-      regex: ['崩れ(る|て|た|ま|ない|なかった|やす)']
-      exclude: [荷崩れ, 土砂崩れ, 崖崩れ, 煮崩れ, 型崩れ]
-      exclude_regex: ['(表示|レイアウト|画面|デザイン|体調|天気|天候)が崩れ']
-    why: 何がどう悪くなったのかを「崩れる」でまとめている。点数が下がったのか、前提が成り立たなくなったのか、失敗したのかが分からない。
-    suggest: [下がる, 成り立たなくなる, 失敗する, 当てはまらなくなる]
-    keep_when: [表示やレイアウトが崩れる]
-    examples:
-      - bad: 5 日目は崩れませんでした。
-        good: 5 日目は点数が下がりませんでした。
-
-  - id: kiku
-    term: 効く
-    yomi: きく
-    category: metaphor-verb
-    severity: warn
-    evidence: {survey: 2026-11, ai: 4.5, human2021: 0.12, qiita2026: 3.19, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 効く 2.0%→22.3%'}
-    match:
-      regex: ['(一番|いちばん|最も|特に|ここで|そこで|地味に|じわじわ|大きく)効(く|いて|き|いた)', '効いてくる', '効き目']
-    why: 何がどう良くなるのかを「効く」で済ませている。英語の what matters や pay off を写した言い方のことも多い。
-    suggest: [効果がある, 大事なのは, 速くなる, 〇〇が減る]
-    keep_when: [キャッシュが効く、薬が効くのような定着した言い方]
-    examples:
-      - bad: ここで効いてくるのが、名前の付け方です。
-        good: ここで大事なのは、名前の付け方です。
-
-  - id: nigasu
-    term: 逃がす
-    yomi: にがす
-    category: metaphor-verb
-    severity: warn
-    evidence: {survey: 2026-11, ai: 0.56, human2021: 0.0, qiita2026: 0.9}
-    match:
-      regex: ['逃が(す|し|さ|せ)']
-      exclude: [熱を逃が, 取り逃が, 見逃]
-    why: 処理を別の場所へ「逃がす」は、移すのか、振り分けるのかが分からない。
-    suggest: [移す, 振り分ける, 別のサーバーで処理する]
-    keep_when: [熱や湿気を逃がす]
-    examples:
-      - bad: ログインの処理を別サーバーに逃がす。
-        good: ログインの処理を別のサーバーに移す。
 
   - id: sudori
     term: 素通り
@@ -871,36 +1299,6 @@ terms:
       - bad: この設計が以降の実装の土台になる。
         good: 以降の実装はこの設計を前提にする。
 
-  - id: zenbuiri
-    term: 全部入り
-    yomi: ぜんぶいり
-    category: cliche
-    severity: info
-    evidence: {survey: 2026-11, ai: 3.24, human2021: 0.09, qiita2026: 0.27}
-    match:
-      literal: [全部入り]
-    why: どの機能や変更を入れたものかが書かれない。
-    suggest: [すべてを組み合わせた版, 全機能を入れた構成]
-    keep_when: []
-    examples:
-      - bad: 全部入りの版で正しさを確かめる。
-        good: すべての変更を組み合わせた版で正しさを確かめる。
-
-  - id: kitei
-    term: 既定
-    yomi: きてい
-    category: stiff-kango
-    severity: info
-    evidence: {survey: 2026-11, ai: 65.84, human2021: 0.81, qiita2026: 4.64, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 既定 0.5%→7.1%'}
-    match:
-      literal: [既定]
-    why: default の訳語。Microsoft 製品の文書では定着しているが、Web の技術文書ではデフォルトや初期値と書くことが多い。
-    suggest: [デフォルト, 初期値, 何も指定しないとき]
-    keep_when: [Microsoft 製品の用語（既定のブラウザ）, 法令]
-    examples:
-      - bad: 既定ではオフになっている。
-        good: デフォルトではオフになっている。
-
   - id: temoto
     term: 手元
     yomi: てもと
@@ -916,36 +1314,6 @@ terms:
       - bad: 手元で負荷をかけて測る。
         good: ローカル環境で負荷をかけて測る。
 
-  - id: mawasu
-    term: 回す
-    yomi: まわす
-    category: metaphor-verb
-    severity: info
-    evidence: {survey: 2026-11, ai: 11.54, human2021: 0.18, qiita2026: 1.22}
-    match:
-      regex: ['(テスト|CI|ジョブ|ループ|処理|ベンチ|検査|計測|測定|バッチ|PDCA|サイクル)を(回|まわ)(す|し|さ|せ)']
-    why: 実行するのか、繰り返すのかが分からない。
-    suggest: [実行する, 繰り返す, 定期的に実行する]
-    keep_when: []
-    examples:
-      - bad: 再起動の検査を回している。
-        good: 再起動の検査を実行している。
-
-  - id: jissoku
-    term: 実測
-    yomi: じっそく
-    category: stiff-kango
-    severity: info
-    evidence: {survey: 2026-11, ai: 8.86, human2021: 0.37, qiita2026: 4.19, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 実測 0.1%→9.4%'}
-    match:
-      literal: [実測]
-    why: 「実測では」のように、何をどの条件で測ったのかを書かずに数値の確かさだけを示す形が多い。
-    suggest: [測定した値, 実際に測った, 〇〇の条件で測った]
-    keep_when: [測量、測定の方法を説明するとき]
-    examples:
-      - bad: 実測では 1/7 になった。
-        good: 手元のベンチで測ると、処理時間が 1/7 になった。
-
   - id: atamauchi
     term: 頭打ち
     yomi: あたまうち
@@ -960,67 +1328,6 @@ terms:
     examples:
       - bad: 100 人で頭打ちになる。
         good: 100 人を超えると処理できる数が増えなくなる。
-
-  - id: zendan
-    term: 前段・後段
-    yomi: ぜんだん・こうだん
-    category: calque
-    severity: info
-    evidence: {survey: 2026-11, ai: 3.1, human2021: 0.12, qiita2026: 0.9}
-    match:
-      regex: ['(前|後)段(で|に|の|へ|を)']
-      exclude_regex: ['(第[0-9０-９一二三四五六七八九十]+[条項号]|項)(前|後)段']
-    why: 処理の順番を段にたとえている。どの処理の前か後かが書かれない。
-    suggest: [前の処理, 後の処理, 〇〇の前, 〇〇の後]
-    keep_when: [法令の条文の前段・後段]
-    examples:
-      - bad: 前段で PKCE の値を検査する。
-        good: トークンを発行する前に PKCE の値を検査する。
-
-  - id: jouryu
-    term: 上流・下流
-    yomi: じょうりゅう・かりゅう
-    category: calque
-    severity: info
-    evidence: {survey: 2026-11, ai: 2.39, human2021: 0.21, qiita2026: 0.7}
-    match:
-      regex: ['(上|下)流(の|に|で|へ|側|から)']
-    why: upstream / downstream の直訳。呼び出し先なのか、後続の処理なのかが分からないことがある。
-    suggest: [呼び出し先, 呼び出し元, 後続の処理, 転送先]
-    keep_when: [nginx の upstream のように定着した用語, 開発工程の上流・下流, 河川]
-    examples:
-      - bad: 下流の API のレート制限に当たる。
-        good: 転送先の API のレート制限に当たる。
-
-  - id: hashiraseru
-    term: 走らせる
-    yomi: はしらせる
-    category: metaphor-verb
-    severity: info
-    evidence: {survey: 2026-11, ai: 4.36, human2021: 0.42, qiita2026: 3.29}
-    match:
-      regex: ['走らせ']
-    why: 実行することを走るにたとえている。
-    suggest: [実行する, 動かす]
-    keep_when: []
-    examples:
-      - bad: 負荷試験を走らせる。
-        good: 負荷試験を実行する。
-
-  - id: tsumaru
-    term: 詰まる
-    yomi: つまる
-    category: metaphor-verb
-    severity: info
-    evidence: {survey: 2026-11, ai: 5.84, human2021: 0.55, qiita2026: 1.57}
-    match:
-      regex: ['(が|で)詰ま(る|り|っ)', '詰まりどころ']
-    why: 止まったのか、遅くなったのか、何が待たされているのかが分からない。
-    suggest: [止まる, 遅くなる, 待たされる, 進まなくなる]
-    keep_when: [配管や紙が物理的に詰まるとき]
-    examples:
-      - bad: 書き込みが詰まっている。
-        good: 書き込みがロックの解放を待っている。
 
   - id: dougu
     term: 道具
@@ -1066,36 +1373,6 @@ terms:
       - bad: エージェントにガードレールを設ける。
         good: エージェントが本番の DB に書き込めないように権限を絞る。
 
-  - id: shisa
-    term: 示唆
-    yomi: しさ
-    category: stiff-kango
-    severity: info
-    evidence: {survey: 2026-11, ai: 0.28, human2021: 0.21, qiita2026: 0.77}
-    match:
-      regex: ['示唆(する|し|さ|が|を|は|的)']
-    why: 何を根拠に、どの程度そう言えるのかが書かれないまま、可能性だけを述べる形が多い。
-    suggest: [〜と考えられる, 〜を示す, 〜の可能性がある]
-    keep_when: [論文]
-    examples:
-      - bad: 同じ API を共有している可能性を示唆する。
-        good: ログの形式が同じなので、同じ API を共有している可能性がある。
-
-  - id: teiseki
-    term: 定石
-    yomi: じょうせき
-    category: cliche
-    severity: info
-    evidence: {survey: 2026-11, ai: 1.2, human2021: 0.14, qiita2026: 0.67, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 定石 0.1%→1.8%'}
-    match:
-      literal: [定石]
-    why: 囲碁の言い方を借りた評価。何が標準的なのかが書かれない。
-    suggest: [よく使われるやり方, 標準的な方法]
-    keep_when: [囲碁]
-    examples:
-      - bad: 全部オンメモリにするのが定石だ。
-        good: データをすべてメモリに載せる方法がよく使われる。
-
   - id: jiko
     term: 事故
     yomi: じこ
@@ -1111,21 +1388,6 @@ terms:
     examples:
       - bad: 本番の DB を消す事故を防ぐ。
         good: 本番の DB を誤って消さないようにする。
-
-  - id: fukabori
-    term: 深掘り
-    yomi: ふかぼり
-    category: cliche
-    severity: info
-    evidence: {survey: 2026-11, ai: 1.13, human2021: 1.2, qiita2026: 2.89}
-    match:
-      literal: [深掘, 深堀]
-    why: 何をどこまで調べるのかが書かれない。
-    suggest: [詳しく調べる, 原因を調べる]
-    keep_when: []
-    examples:
-      - bad: 遅延の原因を深掘りする。
-        good: 遅延の原因を詳しく調べる。
 
   - id: tanaoroshi
     term: 棚卸し
@@ -1158,223 +1420,6 @@ terms:
       - bad: エンタープライズ契約が要る境目を調べる。
         good: エンタープライズプランが必要になる条件を調べる。
 
-  # ---- 2026-11 の調査で足した語（Web の報告とログの集計の両方を見たもの） ----
-  - id: shizukani
-    term: 静かに・黙って
-    yomi: しずかに・だまって
-    category: calque
-    severity: warn
-    evidence: {survey: 2026-11, ai: 0.77, human2021: 0.02, qiita2026: 0.37, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 静か 0.1%→4.9%、黙って 0.1%→3.4%'}
-    match:
-      regex: ['(静かに|黙って|無言で)(失敗|壊|落ち|無視|消え|捨て|上書|止ま|通|切れ|変わ)']
-    why: silently の直訳。システムに人の様子を当てている。通知もエラーも出ずに起きる、という意味なら、そう書く。
-    suggest: [気づかないうちに, エラーを出さずに, 通知なしで, ログを残さずに]
-    keep_when: [人や物の様子を文字どおりに書くとき]
-    examples:
-      - bad: 型が合わないと、値が黙って捨てられる。
-        good: 型が合わないと、値はエラーを出さずに捨てられる。
-      - bad: 設定を間違えるとデータが静かに壊れる。
-        good: 設定を間違えると、気づかないうちにデータがおかしくなる。
-
-  - id: kowareru
-    term: 壊れる
-    yomi: こわれる
-    category: metaphor-verb
-    severity: info
-    evidence: {survey: 2026-11, ai: 7.6, human2021: 0.78, qiita2026: 5.63, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 壊れる 0.8%→13.1%'}
-    match:
-      regex: ['壊れ(る|て|た|ま|ない|なかった|やす)']
-      exclude_regex: ['(画面|機械|端末|ディスク|HDD|SSD|PC|パソコン)が壊れ']
-    why: データやシステムが「壊れる」は、使えなくなったのか、値がおかしくなったのか、整合性が失われたのかが分からない。
-    suggest: [おかしくなる, 使えなくなる, 整合性が失われる, 動かなくなる]
-    keep_when: [機器が物理的に壊れるとき]
-    examples:
-      - bad: 同時に書き込むと集計が壊れる。
-        good: 同時に書き込むと集計の値が実際の件数と合わなくなる。
-
-  - id: shunkan
-    term: 瞬間
-    yomi: しゅんかん
-    category: calque
-    severity: info
-    evidence: {survey: 2026-11, ai: 1.62, human2021: 0.6, qiita2026: 4.93, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 瞬間 0.9%→13.7%'}
-    match:
-      regex: ['(た|る|す|く)瞬間']
-    why: the moment の直訳として「〜した瞬間」を多用する形。時間の短さを強調する必要がなければ、時点やきっかけを書く。
-    suggest: [〜するとすぐ, 〜した時点で, 〜すると]
-    keep_when: [一瞬であることを伝える必要があるとき]
-    examples:
-      - bad: トークンが失効した瞬間に、すべての要求が失敗する。
-        good: トークンが失効すると、すべての要求が失敗する。
-
-  - id: kyokai
-    term: 境界
-    yomi: きょうかい
-    category: calque
-    severity: info
-    evidence: {survey: 2026-11, ai: 3.8, human2021: 2.14, qiita2026: 8.65, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 境界 1.0%→12.8%'}
-    match:
-      literal: [境界]
-      exclude: [境界値, 境界線]
-    why: boundary の訳。何と何を区別しているのかが書かれないまま使われることがある。
-    suggest: [〇〇と〇〇の区別, 範囲, 分け方]
-    keep_when: [信頼境界・境界値テストなど定着した用語, パッケージやモジュールの境界を説明するとき]
-    examples:
-      - bad: この設計では境界があいまいになる。
-        good: この設計では、どの処理を API 側で行うかがあいまいになる。
-
-  - id: tsukiawase
-    term: 突き合わせる
-    yomi: つきあわせる
-    category: cliche
-    severity: info
-    evidence: {survey: 2026-11, ai: 3.17, human2021: 0.09, qiita2026: 1.52, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 突き合わせる 0.06%→3.7%'}
-    match:
-      literal: [突き合わせ, 突合]
-    why: 確認の言い回しとして多用される。何と何を比べて、何を確かめるのかを書く。
-    suggest: [見比べる, 比べる, 〇〇と一致するか確かめる]
-    keep_when: [会計の突合のように業務の用語として使うとき]
-    examples:
-      - bad: ログと設定を突き合わせる。
-        good: ログに出た接続先が、設定の接続先と一致するかを確かめる。
-
-  - id: torichigae
-    term: 取り違える
-    yomi: とりちがえる
-    category: cliche
-    severity: info
-    evidence: {survey: 2026-11, ai: 4.99, human2021: 0.14, qiita2026: 0.7}
-    match:
-      literal: [取り違え]
-    why: 何を何と間違えたのかが書かれないことが多い。
-    suggest: [〇〇を〇〇と間違える, 順序を間違える]
-    keep_when: []
-    examples:
-      - bad: 再起動の順番の取り違えで、書き込みが消える。
-        good: DB より先にアプリを再起動すると、書き込みが消える。
-
-  - id: dantei
-    term: 断定
-    yomi: だんてい
-    category: stiff-kango
-    severity: info
-    evidence: {survey: 2026-11, ai: 0.42, human2021: 0.14, qiita2026: 1.05, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 断定 0.08%→2.4%'}
-    match:
-      literal: [断定]
-    why: 「〜とは断定できません」の形が多い。何が分かっていて何が分からないのかを書く。
-    suggest: [言い切る, 〜とは限らない, 〜かどうかは分かっていない]
-    keep_when: []
-    examples:
-      - bad: 原因がキャッシュだとは断定できません。
-        good: 原因がキャッシュかどうかは、まだ分かっていません。
-
-  - id: utagau
-    term: 疑う
-    yomi: うたがう
-    category: cliche
-    severity: info
-    evidence: {survey: 2026-11, ai: 2.39, human2021: 0.71, qiita2026: 2.42}
-    match:
-      regex: ['疑(う|い|っ|わ)']
-      exclude: [疑問, 疑似, 容疑, 質疑, 懐疑, 半信半疑]
-    why: 「〜を疑う」は、何を確かめるのかが書かれない。
-    suggest: [確かめる, 原因として考える, 念のため見直す]
-    keep_when: []
-    examples:
-      - bad: まずネットワークを疑う。
-        good: まずネットワークの遅延を測る。
-
-  - id: mihari
-    term: 見張る
-    yomi: みはる
-    category: calque
-    severity: warn
-    evidence: {survey: 2026-11, ai: 4.85, human2021: 0.02, qiita2026: 0.2}
-    match:
-      literal: [見張]
-    why: watch / watcher の直訳。システムには「監視」という定着した言い方がある。
-    suggest: [監視する, 定期的に確かめる, watcher]
-    keep_when: [人が見張りに立つとき]
-    examples:
-      - bad: CI の結果を見張る。
-        good: CI の結果を監視する。
-
-  - id: mado
-    term: 窓（時間）
-    yomi: まど
-    category: calque
-    severity: warn
-    evidence: {survey: 2026-11, ai: 0.77, human2021: 0.0, qiita2026: 0.07}
-    match:
-      regex: ['([0-9０-９]+\s*(分|秒|時間|日|週)|時間|期間|メンテナンス|投稿|集計|受付)の窓', '時間窓']
-    why: time window の直訳。時間帯や期間と書けば足りる。
-    suggest: [時間帯, 期間, 〇時から〇時まで]
-    keep_when: []
-    examples:
-      - bad: 5 分の窓で集計する。
-        good: 5 分ごとに集計する。
-
-  - id: jitsugai
-    term: 実害
-    yomi: じつがい
-    category: cliche
-    severity: info
-    evidence: {survey: 2026-11, ai: 0.42, human2021: 0.02, qiita2026: 0.3}
-    match:
-      literal: [実害]
-    why: 「実害はない」で済ませると、何が起きて何が起きないのかが書かれない。
-    suggest: [実際の影響, 利用者への影響, 〇〇は起きない]
-    keep_when: []
-    examples:
-      - bad: 今のところ実害はない。
-        good: 今のところ、利用者の画面には影響が出ていない。
-
-  - id: fusagu
-    term: 塞ぐ
-    yomi: ふさぐ
-    category: metaphor-verb
-    severity: info
-    evidence: {survey: 2026-11, ai: 1.13, human2021: 0.07, qiita2026: 0.85}
-    match:
-      regex: ['塞(ぐ|い|が|げ)']
-    why: 何をどう防ぐのかを、穴を塞ぐたとえで済ませている。
-    suggest: [防ぐ, 対策する, 修正する, 拒否する]
-    keep_when: [脆弱性を修正することを「穴を塞ぐ」と言う定着した言い方]
-    examples:
-      - bad: この経路を塞ぐ。
-        good: この経路からの要求を拒否する。
-
-  - id: hiku
-    term: 引く（参照）
-    yomi: ひく
-    category: calque
-    severity: info
-    evidence: {survey: 2026-11, ai: 7.25, human2021: 0.9, qiita2026: 1.47}
-    match:
-      regex: ['(から|を)引(く|い|け)']
-      exclude: [線を引, 差し引, 割り引, 取り引, 手を引, 風邪を引, 辞書を引, 気を引, 注意を引, 幕を引]
-    why: 値や仕様を「引く」は、参照するのか、取得するのか、呼び出すのかが分からない。
-    suggest: [参照する, 取得する, 読み込む, 呼び出す]
-    keep_when: [辞書を引く、線を引くなど定着した言い方]
-    examples:
-      - bad: 設定ファイルから値を引く。
-        good: 設定ファイルから値を読み込む。
-
-  - id: ketachigai
-    term: 桁違い
-    yomi: けたちがい
-    category: cliche
-    severity: info
-    evidence: {survey: 2026-11, ai: 0.35, human2021: 0.07, qiita2026: 0.25}
-    match:
-      literal: [桁違い]
-    why: どれだけ違うのかを、数値ではなく評価の語で書いている。
-    suggest: [〇倍, はるかに大きい, 1桁多い（実際に1桁なら）]
-    keep_when: []
-    examples:
-      - bad: 処理速度が桁違いに速い。
-        good: 処理時間が 1/12 になった。
-
   - id: kouzu
     term: 構図
     yomi: こうず
@@ -1390,21 +1435,6 @@ terms:
       - bad: 認可サーバーと API の構図を整理する。
         good: 認可サーバーが発行したトークンを API がどう検証するかを整理する。
 
-  - id: mazaru
-    term: 混ざる
-    yomi: まざる
-    category: metaphor-verb
-    severity: info
-    evidence: {survey: 2026-11, ai: 3.02, human2021: 0.69, qiita2026: 2.64}
-    match:
-      regex: ['混ざ(る|り|っ|ら)']
-    why: 何がどこに入り込むのかが書かれないことが多い。
-    suggest: [入り込む, 混入する, 一緒に出力される]
-    keep_when: [液体などが文字どおり混ざるとき]
-    examples:
-      - bad: 本番のデータに試験用の行が混ざる。
-        good: 本番のテーブルに試験用の行が入り込む。
-
   - id: senbiki
     term: 線引き
     yomi: せんびき
@@ -1419,64 +1449,3 @@ terms:
     examples:
       - bad: 公開 API と内部 API の線引きを決める。
         good: どの API を外部に公開するかを決める。
-
-  - id: ban
-    term: 版（バージョン）
-    yomi: はん
-    category: calque
-    severity: warn
-    evidence: {survey: 2026-11, ai: 2.74, human2021: 0.07, qiita2026: 0.1}
-    match:
-      regex: ['(この|新しい|古い|前の|次の|最新の|今の|手元の|直した|修正した)版']
-    why: version の直訳。ソフトウェアではバージョンと書くのが定着している。
-    suggest: [バージョン, リリース, コミット]
-    keep_when: [書籍の版（第2版）, 日本語版・無料版のような製品の版]
-    examples:
-      - bad: 手元の版を新しくしてから、もう一度試してください。
-        good: 手元のバージョンを新しくしてから、もう一度試してください。
-
-  - id: tsubusu
-    term: 潰す
-    yomi: つぶす
-    category: metaphor-verb
-    severity: info
-    evidence: {survey: 2026-11, ai: 0.42, human2021: 0.07, qiita2026: 0.52}
-    match:
-      regex: ['(を|が)潰(す|し|さ|せ)']
-      exclude: [時間を潰, 顔を潰]
-    why: バグや課題を「潰す」は、直したのか、消したのか、回避したのかが分からない。
-    suggest: [直す, 解消する, 取り除く]
-    keep_when: []
-    examples:
-      - bad: 残っている課題を潰す。
-        good: 残っている課題を解消する。
-
-  - id: hatan
-    term: 破綻
-    yomi: はたん
-    category: cliche
-    severity: info
-    evidence: {survey: 2026-11, ai: 0.49, human2021: 0.55, qiita2026: 2.32, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 破綻 0.2%→2.7%'}
-    match:
-      literal: [破綻]
-    why: どの程度うまくいかなくなるのかが書かれず、状態だけが強く言われる。
-    suggest: [うまくいかなくなる, 成り立たなくなる, 〇〇が失敗する]
-    keep_when: [経営破綻など文字どおりの意味]
-    examples:
-      - bad: この設計は利用者が増えると破綻します。
-        good: この設計では、利用者が 1 万人を超えると応答が 3 秒を超えます。
-
-  - id: betsumono
-    term: 別物
-    yomi: べつもの
-    category: cliche
-    severity: info
-    evidence: {survey: 2026-11, ai: 0.7, human2021: 0.74, qiita2026: 2.42, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 別物 0.4%→5.5%'}
-    match:
-      literal: [別物]
-    why: どう違うのかを書かずに、違うことだけを強く言う。
-    suggest: [まったく違うもの, 〇〇が違う]
-    keep_when: []
-    examples:
-      - bad: 認証と認可は別物です。
-        good: 認証は相手が誰かを確かめ、認可はその相手に何を許すかを決めます。
