@@ -36,7 +36,7 @@ uv run --script scripts/check.py README.md
 
 スクリプトは PEP 723 のインライン宣言で依存を持ち、`uv run --script` で動かします。依存は PyYAML と jsonschema だけにし、増やすときは理由をコミットメッセージに書きます。Python は 3.11 以上。
 
-## ワードを足す・直すとき
+## ワードを足す・変えるとき
 
 - 手順と判断の基準は `references/survey.md` に従う。足す前に `scripts/survey.py` で使い方と件数を確かめる。
 - 文書では、一覧に載せるものを「ワード」と呼ぶ。

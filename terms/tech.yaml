@@ -16,6 +16,7 @@ categories:
   inflated-noun: 役割を大げさに呼ぶ名詞
   doc-structure: 文書の区切りの直訳
   metaphor-verb: 比喩の動詞
+  casual-verb: 話し言葉の動詞
   calque: 英語の直訳語
   stiff-kango: 硬い漢語
   cliche: 評価の決まり文句
@@ -465,6 +466,27 @@ terms:
     examples:
       - bad: 残っている課題を潰す。
         good: 残っている課題を解消する。
+
+  # ---- 話し言葉の動詞（casual-verb）----
+  - id: naosu
+    term: 直す
+    yomi: なおす
+    category: casual-verb
+    severity: warn
+    evidence: {survey: 2026-11, ai: 41.2, human2021: 1.06, qiita2026: 9.39}
+    match:
+      regex: ['((?<![一-龥々ぁ-ゔ])|(?<=[をがもはでへや]))直[すしさせそっ]']
+      exclude: [取りも直さず]
+    why: 話し言葉の「直す」を、不具合やコードの修正に使っている。技術文書では「修正する」と書くほうが、何をしたのかがはっきりする。見直す、書き直す、やり直すのような複合語と、「〜に直す」（変換）は検出しない。
+    suggest: [修正する, 改める, 解消する, 変更する, 〇〇を〇〇にする]
+    keep_when: [会話や口語の文, 「直し方」のような見出しで、文書全体が口語のとき]
+    examples:
+      - bad: エクスポートを直して中継を戻す。
+        good: エクスポートを修正して中継を戻す。
+      - bad: これは設定を変えるだけで直せます。
+        good: これは設定を変えるだけで解消できます。
+      - bad: 指摘は 2 回とも直しています。
+        good: 指摘は 2 回とも修正しています。
 
   # ---- 英語の直訳語（calque）----
   - id: mon

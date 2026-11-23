@@ -6,12 +6,12 @@ AI が書いた日本語の文章によく出るワード（AI の口癖）を�
 たとえば「設定はこの YAML を正本とする」「詳細は次の節で説明する」のような文の「正本」「節」を見つけ、「基準にする」「セクション」のような候補を、文脈に合わせて出します。
 <!-- ai-kuse-enable -->
 
-[yomiyasu](https://github.com/nanaism/yomiyasu) が文章全体を推敲するのに対し、ai-kuse はワードの選び方だけを扱います。併用するときは、ai-kuse でワードを直してから yomiyasu をかけます。
+[yomiyasu](https://github.com/nanaism/yomiyasu) が文章全体を推敲するのに対し、ai-kuse はワードの選び方だけを扱います。併用するときは、ai-kuse でワードを言い換えてから yomiyasu をかけます。
 
 ## しくみ
 
 1. `scripts/check.py` が `terms/*.yaml` のパターンで本文を調べ、当たった箇所を出す。コードブロック、インラインコード、URL は見ない。
-2. Claude が当たった箇所の前後を読み、直す・残す・確かめるのどれかに決め、直す箇所には言い換えの案を出す。
+2. Claude が当たった箇所の前後を読み、言い換える・残す・確かめるのどれかに決め、言い換える箇所には案を出す。
 
 検出をスクリプトに任せているので、同じ文章なら毎回同じ箇所が出ます。言い換えるかどうかの判断だけを Claude が行います。方針を決めたときの比較は [設計案](https://claude.ai/artifact/FmbVMetuhF5ALZVPcoCrWx)（非公開）にあります。
 
@@ -30,7 +30,7 @@ Claude Code で:
 | 呼び出し | すること |
 |---|---|
 | `/ai-kuse docs/design.md` | 検出して提案する。ファイルは書き換えない |
-| `/ai-kuse fix docs/design.md` | 直すと決めた箇所をファイルに反映する |
+| `/ai-kuse fix docs/design.md` | 言い換えると決めた箇所をファイルに反映する |
 | `/ai-kuse add ワード 言い換え` | ワードを一覧に登録する |
 | `/ai-kuse list` | 登録済みのワードを見る |
 
@@ -52,7 +52,7 @@ terms:
   - id: setsu
     term: 節
     category: doc-structure          # categories に書いた分類
-    severity: warn                   # warn: 原則直す / info: 文脈しだい
+    severity: warn                   # warn: 原則言い換える / info: 文脈しだい
     match:
       regex: ['(この|本|次の|前の)節', '節(では|で|に|を)']
       exclude: [季節, 節約, 調節]      # 当たっても無視するワード
@@ -72,7 +72,7 @@ terms:
 uv run --script scripts/validate.py
 ```
 
-今の一覧（`terms/tech.yaml`）は技術文書向けで、ワードは108件です。出現頻度の調査（[research/2026-11-term-survey](research/2026-11-term-survey/README.md)）の結果を、各ワードの `evidence` に書いています。
+今の一覧（`terms/tech.yaml`）は技術文書向けで、ワードは109件です。出現頻度の調査（[research/2026-11-term-survey](research/2026-11-term-survey/README.md)）の結果を、各ワードの `evidence` に書いています。
 
 ## ワードを足す前の調査
 
