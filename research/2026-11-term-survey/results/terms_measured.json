@@ -1168,6 +1168,34 @@
    "Q2026_docs": 172
   },
   {
+   "id": "sou",
+   "term": "層",
+   "severity": "warn",
+   "AI_n": 80,
+   "H2021_n": 184,
+   "Q2026_n": 705,
+   "AI_per100k": 5.63,
+   "H2021_per100k": 4.24,
+   "Q2026_per100k": 17.57,
+   "AI_docs": 54,
+   "H2021_docs": 65,
+   "Q2026_docs": 178
+  },
+  {
+   "id": "kata",
+   "term": "型（方式・パターン）",
+   "severity": "warn",
+   "AI_n": 121,
+   "H2021_n": 6,
+   "Q2026_n": 32,
+   "AI_per100k": 8.51,
+   "H2021_per100k": 0.14,
+   "Q2026_per100k": 0.8,
+   "AI_docs": 61,
+   "H2021_docs": 5,
+   "Q2026_docs": 17
+  },
+  {
    "id": "dodai",
    "term": "土台",
    "severity": "warn",
