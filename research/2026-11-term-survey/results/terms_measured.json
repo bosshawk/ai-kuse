@@ -1196,6 +1196,34 @@
    "Q2026_docs": 17
   },
   {
+   "id": "jiku",
+   "term": "軸",
+   "severity": "warn",
+   "AI_n": 113,
+   "H2021_n": 124,
+   "Q2026_n": 221,
+   "AI_per100k": 7.95,
+   "H2021_per100k": 2.86,
+   "Q2026_per100k": 5.51,
+   "AI_docs": 35,
+   "H2021_docs": 43,
+   "Q2026_docs": 93
+  },
+  {
+   "id": "men",
+   "term": "面（surface）",
+   "severity": "warn",
+   "AI_n": 9,
+   "H2021_n": 8,
+   "Q2026_n": 39,
+   "AI_per100k": 0.63,
+   "H2021_per100k": 0.18,
+   "Q2026_per100k": 0.97,
+   "AI_docs": 5,
+   "H2021_docs": 7,
+   "Q2026_docs": 13
+  },
+  {
    "id": "dodai",
    "term": "土台",
    "severity": "warn",
