@@ -39,7 +39,7 @@ corp = {k:[(s,clean(t)) for s,t in v] for k,v in corp.items()}
 size = {k: sum(len(JA.findall(t)) for _,t in v) for k,v in corp.items()}
 print("size(ja chars):", size, {k:len(v) for k,v in corp.items()})
 
-# 1) 登録済みの語の頻度（10万字あたり）と、出た文書の数
+# 1) 登録済みのワードの頻度（10万字あたり）と、出た文書の数
 terms = load_terms()
 res = {}
 for k,v in corp.items():

@@ -1,9 +1,9 @@
 # yaml-language-server: $schema=../schema/terms.schema.json
 #
-# 技術文書向けの語の一覧。
+# 技術文書向けのワードの一覧。
 # 1件ごとに、検出に使う match と、言い換えを判断するための why / suggest / keep_when / examples を持つ。
-# examples の bad は必ずその語に当たり、good は当たらないことを validate.py が確かめる。
-# 語を足したら: uv run --script scripts/validate.py
+# examples の bad は必ずそのワードに当たり、good は当たらないことを validate.py が確かめる。
+# ワードを足したら: uv run --script scripts/validate.py
 #
 # evidence は 10万字あたりの出現数（2026-11 の調査。research/2026-11-term-survey/README.md）。
 #   ai: Claude Code の会話ログの Claude の文章 / human2021: Qiita の2021年8〜12月の記事 / qiita2026: Qiita の2026年の記事
@@ -30,7 +30,7 @@ terms:
     yomi: しょうほん
     category: inflated-noun
     severity: warn
-    evidence: {survey: 2026-11, ai: 8.44, human2021: 0.0, qiita2026: 2.14, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 正本 0.0%→1.7%'}
+    evidence: {survey: 2026-11, ai: 8.42, human2021: 0.0, qiita2026: 2.14, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 正本 0.0%→1.7%'}
     match:
       literal: [正本]
     why: 元のファイルや基準のデータを「正本」と呼ぶと、唯一の正しい版という含みが加わる。技術文書では一般的でない。
@@ -45,7 +45,7 @@ terms:
     yomi: だいちょう
     category: inflated-noun
     severity: warn
-    evidence: {survey: 2026-11, ai: 8.09, human2021: 0.0, qiita2026: 0.9}
+    evidence: {survey: 2026-11, ai: 8.07, human2021: 0.0, qiita2026: 0.9}
     match:
       literal: [台帳]
     why: ただの一覧や表を「台帳」と呼ぶと、公的な記録のような重さが加わる。
@@ -60,7 +60,7 @@ terms:
     yomi: けいやく
     category: inflated-noun
     severity: warn
-    evidence: {survey: 2026-11, ai: 12.24, human2021: 2.08, qiita2026: 13.33}
+    evidence: {survey: 2026-11, ai: 12.21, human2021: 2.08, qiita2026: 13.33}
     match:
       literal: [契約]
       exclude: [契約書, 契約者, 契約期間, 利用契約, 契約更新, 契約プラン]
@@ -90,7 +90,7 @@ terms:
     term: ゲート
     category: inflated-noun
     severity: info
-    evidence: {survey: 2026-11, ai: 1.83, human2021: 2.31, qiita2026: 4.04}
+    evidence: {survey: 2026-11, ai: 1.82, human2021: 2.31, qiita2026: 4.04}
     match:
       literal: [ゲート]
       exclude: [ゲートウェイ, ゲートキーパー]
@@ -106,12 +106,12 @@ terms:
     yomi: いちじじょうほう
     category: inflated-noun
     severity: info
-    evidence: {survey: 2026-11, ai: 1.13, human2021: 0.05, qiita2026: 1.64}
+    evidence: {survey: 2026-11, ai: 1.12, human2021: 0.05, qiita2026: 1.64}
     match:
       literal: [一次情報, 一次ソース]
     why: 公式ドキュメントを読むことを「一次情報にあたる」と大げさに言う形が多い。何を見たかを書けば足りる。
     suggest: [公式ドキュメント, 元の資料, リリースノート, ソースコード]
-    keep_when: [調査報告で一次資料と二次資料を分けて扱うとき（「一次資料」は定着した語なので検出しない）]
+    keep_when: [調査報告で一次資料と二次資料を分けて扱うとき（「一次資料」は定着したワードなので検出しない）]
     examples:
       - bad: 必ず一次情報にあたって確認すること。
         good: 必ず公式ドキュメントで確認すること。
@@ -122,7 +122,7 @@ terms:
     yomi: せつ
     category: doc-structure
     severity: warn
-    evidence: {survey: 2026-11, ai: 3.73, human2021: 1.06, qiita2026: 1.27}
+    evidence: {survey: 2026-11, ai: 4.0, human2021: 1.06, qiita2026: 1.27}
     match:
       regex:
         - '(この|本|次の|前の|上の|下の|各|同|以下の|後の|別の|最後の)節'
@@ -159,7 +159,7 @@ terms:
     yomi: よせる
     category: metaphor-verb
     severity: warn
-    evidence: {survey: 2026-11, ai: 4.36, human2021: 0.37, qiita2026: 2.47}
+    evidence: {survey: 2026-11, ai: 4.35, human2021: 0.37, qiita2026: 2.47}
     match:
       regex: ['寄せ(る|て|た|ます|ました|られ|れば|よう|ない|ず)']
       exclude: [取り寄せ, 押し寄せ, 引き寄せ, 呼び寄せ, 寄せ書き, 関心を寄せ, 期待を寄せ, 意見を寄せ, 心を寄せ, 身を寄せ, 問い合わせ]
@@ -298,7 +298,7 @@ terms:
     yomi: おちる
     category: metaphor-verb
     severity: warn
-    evidence: {survey: 2026-11, ai: 20.54, human2021: 3.11, qiita2026: 6.9}
+    evidence: {survey: 2026-11, ai: 20.49, human2021: 3.11, qiita2026: 6.9}
     match:
       regex: ['落ち(る|た|て|ます|ました|ない|なく|やすい|れば|ず)']
       exclude: [落ち着, 落ち込, 落ち度, 落ち合, 気落ち, 落ち葉, 抜け落ち]
@@ -316,7 +316,7 @@ terms:
     yomi: くずれる
     category: metaphor-verb
     severity: warn
-    evidence: {survey: 2026-11, ai: 7.81, human2021: 0.3, qiita2026: 2.24}
+    evidence: {survey: 2026-11, ai: 7.79, human2021: 0.3, qiita2026: 2.24}
     match:
       regex: ['崩れ(る|て|た|ま|ない|なかった|やす)']
       exclude: [荷崩れ, 土砂崩れ, 崖崩れ, 煮崩れ, 型崩れ]
@@ -333,7 +333,7 @@ terms:
     yomi: きく
     category: metaphor-verb
     severity: warn
-    evidence: {survey: 2026-11, ai: 4.5, human2021: 0.12, qiita2026: 3.19, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 効く 2.0%→22.3%'}
+    evidence: {survey: 2026-11, ai: 4.49, human2021: 0.12, qiita2026: 3.19, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 効く 2.0%→22.3%'}
     match:
       regex: ['(一番|いちばん|最も|特に|ここで|そこで|地味に|じわじわ|大きく)効(く|いて|き|いた)', '効いてくる', '効き目']
     why: 何がどう良くなるのかを「効く」で済ませている。英語の what matters や pay off を写した言い方のことも多い。
@@ -364,7 +364,7 @@ terms:
     yomi: まわす
     category: metaphor-verb
     severity: info
-    evidence: {survey: 2026-11, ai: 11.54, human2021: 0.18, qiita2026: 1.22}
+    evidence: {survey: 2026-11, ai: 11.51, human2021: 0.18, qiita2026: 1.22}
     match:
       regex: ['(テスト|CI|ジョブ|ループ|処理|ベンチ|検査|計測|測定|バッチ|PDCA|サイクル)を(回|まわ)(す|し|さ|せ)']
     why: 実行するのか、繰り返すのかが分からない。
@@ -379,7 +379,7 @@ terms:
     yomi: はしらせる
     category: metaphor-verb
     severity: info
-    evidence: {survey: 2026-11, ai: 4.36, human2021: 0.42, qiita2026: 3.29}
+    evidence: {survey: 2026-11, ai: 4.35, human2021: 0.42, qiita2026: 3.29}
     match:
       regex: ['走らせ']
     why: 実行することを走るにたとえている。
@@ -394,7 +394,7 @@ terms:
     yomi: つまる
     category: metaphor-verb
     severity: info
-    evidence: {survey: 2026-11, ai: 5.84, human2021: 0.55, qiita2026: 1.57}
+    evidence: {survey: 2026-11, ai: 5.83, human2021: 0.55, qiita2026: 1.57}
     match:
       regex: ['(が|で)詰ま(る|り|っ)', '詰まりどころ']
     why: 止まったのか、遅くなったのか、何が待たされているのかが分からない。
@@ -409,7 +409,7 @@ terms:
     yomi: こわれる
     category: metaphor-verb
     severity: info
-    evidence: {survey: 2026-11, ai: 7.6, human2021: 0.78, qiita2026: 5.63, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 壊れる 0.8%→13.1%'}
+    evidence: {survey: 2026-11, ai: 7.58, human2021: 0.78, qiita2026: 5.63, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 壊れる 0.8%→13.1%'}
     match:
       regex: ['壊れ(る|て|た|ま|ない|なかった|やす)']
       exclude_regex: ['(画面|機械|端末|ディスク|HDD|SSD|PC|パソコン)が壊れ']
@@ -425,7 +425,7 @@ terms:
     yomi: ふさぐ
     category: metaphor-verb
     severity: info
-    evidence: {survey: 2026-11, ai: 1.13, human2021: 0.07, qiita2026: 0.85}
+    evidence: {survey: 2026-11, ai: 1.12, human2021: 0.07, qiita2026: 0.85}
     match:
       regex: ['塞(ぐ|い|が|げ)']
     why: 何をどう防ぐのかを、穴を塞ぐたとえで済ませている。
@@ -567,7 +567,7 @@ terms:
     yomi: ほんせん
     category: calque
     severity: warn
-    evidence: {survey: 2026-11, ai: 37.14, human2021: 0.02, qiita2026: 0.02}
+    evidence: {survey: 2026-11, ai: 37.06, human2021: 0.02, qiita2026: 0.02}
     match:
       literal: [本線]
     why: mainline の直訳。main ブランチなのか、本番に出している版なのかが分からない。
@@ -582,7 +582,7 @@ terms:
     yomi: じゅみょう
     category: calque
     severity: warn
-    evidence: {survey: 2026-11, ai: 6.68, human2021: 0.25, qiita2026: 0.62}
+    evidence: {survey: 2026-11, ai: 6.67, human2021: 0.25, qiita2026: 0.62}
     match:
       literal: [寿命]
       exclude: [電池の寿命, バッテリーの寿命, 製品寿命, 平均寿命]
@@ -598,7 +598,7 @@ terms:
     yomi: いりぐち
     category: calque
     severity: warn
-    evidence: {survey: 2026-11, ai: 9.43, human2021: 0.35, qiita2026: 6.63, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 入口 0.4%→6.8%'}
+    evidence: {survey: 2026-11, ai: 9.4, human2021: 0.35, qiita2026: 6.63, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 入口 0.4%→6.8%'}
     match:
       regex: ['入り?口']
       exclude: [駅の入口, 建物の入口, 入口付近, 出入口, 出入り口]
@@ -631,7 +631,7 @@ terms:
     yomi: みはる
     category: calque
     severity: warn
-    evidence: {survey: 2026-11, ai: 4.85, human2021: 0.02, qiita2026: 0.2}
+    evidence: {survey: 2026-11, ai: 4.84, human2021: 0.02, qiita2026: 0.2}
     match:
       literal: [見張]
     why: watch / watcher の直訳。システムには「監視」という定着した言い方がある。
@@ -707,7 +707,7 @@ terms:
     yomi: ぜんだん・こうだん
     category: calque
     severity: info
-    evidence: {survey: 2026-11, ai: 3.1, human2021: 0.12, qiita2026: 0.9}
+    evidence: {survey: 2026-11, ai: 3.09, human2021: 0.12, qiita2026: 0.9}
     match:
       regex: ['(前|後)段(で|に|の|へ|を)']
       exclude_regex: ['(第[0-9０-９一二三四五六七八九十]+[条項号]|項)(前|後)段']
@@ -738,7 +738,7 @@ terms:
     yomi: しゅんかん
     category: calque
     severity: info
-    evidence: {survey: 2026-11, ai: 1.62, human2021: 0.6, qiita2026: 4.93, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 瞬間 0.9%→13.7%'}
+    evidence: {survey: 2026-11, ai: 1.61, human2021: 0.6, qiita2026: 4.93, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 瞬間 0.9%→13.7%'}
     match:
       regex: ['(た|る|す|く)瞬間']
     why: the moment の直訳として「〜した瞬間」を多用する形。時間の短さを強調する必要がなければ、時点やきっかけを書く。
@@ -753,7 +753,7 @@ terms:
     yomi: きょうかい
     category: calque
     severity: info
-    evidence: {survey: 2026-11, ai: 3.8, human2021: 2.14, qiita2026: 8.65, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 境界 1.0%→12.8%'}
+    evidence: {survey: 2026-11, ai: 3.79, human2021: 2.14, qiita2026: 8.65, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 境界 1.0%→12.8%'}
     match:
       literal: [境界]
       exclude: [境界値, 境界線]
@@ -769,7 +769,7 @@ terms:
     yomi: ひく
     category: calque
     severity: info
-    evidence: {survey: 2026-11, ai: 7.25, human2021: 0.9, qiita2026: 1.47}
+    evidence: {survey: 2026-11, ai: 7.23, human2021: 0.9, qiita2026: 1.47}
     match:
       regex: ['(から|を)引(く|い|け)']
       exclude: [線を引, 差し引, 割り引, 取り引, 手を引, 風邪を引, 辞書を引, 気を引, 注意を引, 幕を引]
@@ -786,7 +786,7 @@ terms:
     yomi: たんぽ
     category: stiff-kango
     severity: warn
-    evidence: {survey: 2026-11, ai: 1.2, human2021: 1.43, qiita2026: 3.19}
+    evidence: {survey: 2026-11, ai: 1.19, human2021: 1.43, qiita2026: 3.19}
     match:
       literal: [担保]
     why: 「品質を担保する」は何をすれば品質が保たれるのかが書かれない。言い換えるときは、確保か保証かで強さが変わる点に注意する。
@@ -801,7 +801,7 @@ terms:
     yomi: きてい
     category: stiff-kango
     severity: info
-    evidence: {survey: 2026-11, ai: 65.84, human2021: 0.81, qiita2026: 4.64, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 既定 0.5%→7.1%'}
+    evidence: {survey: 2026-11, ai: 65.69, human2021: 0.81, qiita2026: 4.64, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 既定 0.5%→7.1%'}
     match:
       literal: [既定]
     why: default の訳語。Microsoft 製品の文書では定着しているが、Web の技術文書ではデフォルトや初期値と書くことが多い。
@@ -816,7 +816,7 @@ terms:
     yomi: じっそく
     category: stiff-kango
     severity: info
-    evidence: {survey: 2026-11, ai: 8.86, human2021: 0.37, qiita2026: 4.19, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 実測 0.1%→9.4%'}
+    evidence: {survey: 2026-11, ai: 8.84, human2021: 0.37, qiita2026: 4.19, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 実測 0.1%→9.4%'}
     match:
       literal: [実測]
     why: 「実測では」のように、何をどの条件で測ったのかを書かずに数値の確かさだけを示す形が多い。
@@ -893,7 +893,7 @@ terms:
     yomi: おとしあな
     category: cliche
     severity: warn
-    evidence: {survey: 2026-11, ai: 9.14, human2021: 0.37, qiita2026: 2.27, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 落とし穴 0.3%→4.0%'}
+    evidence: {survey: 2026-11, ai: 9.12, human2021: 0.37, qiita2026: 2.27, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 落とし穴 0.3%→4.0%'}
     match:
       literal: [落とし穴]
     why: 何に気をつければよいかを、穴のたとえで済ませている。
@@ -938,7 +938,7 @@ terms:
     yomi: うちて
     category: cliche
     severity: warn
-    evidence: {survey: 2026-11, ai: 17.52, human2021: 0.25, qiita2026: 0.15}
+    evidence: {survey: 2026-11, ai: 17.48, human2021: 0.25, qiita2026: 0.15}
     match:
       literal: [打ち手]
     why: コンサルタントの言い方で、技術文書では対策の中身を書いたほうが伝わる。
@@ -953,7 +953,7 @@ terms:
     yomi: ほんめい
     category: cliche
     severity: warn
-    evidence: {survey: 2026-11, ai: 1.34, human2021: 0.05, qiita2026: 0.4}
+    evidence: {survey: 2026-11, ai: 1.33, human2021: 0.05, qiita2026: 0.4}
     match:
       literal: [本命]
     why: 競馬の言い方を借りた評価。どの点でその案がよいのかが書かれない。
@@ -968,7 +968,7 @@ terms:
     yomi: みたて
     category: cliche
     severity: warn
-    evidence: {survey: 2026-11, ai: 4.92, human2021: 0.23, qiita2026: 0.85}
+    evidence: {survey: 2026-11, ai: 4.91, human2021: 0.23, qiita2026: 0.85}
     match:
       literal: [見立て]
     why: 誰がどの根拠で判断したのかが書かれないまま、判断だけが述べられる。
@@ -998,7 +998,7 @@ terms:
     yomi: かいぞうど
     category: cliche
     severity: info
-    evidence: {survey: 2026-11, ai: 1.41, human2021: 4.04, qiita2026: 1.2}
+    evidence: {survey: 2026-11, ai: 1.4, human2021: 4.04, qiita2026: 1.2}
     match:
       literal: [解像度]
       exclude: [画面解像度, 画像解像度, ディスプレイの解像度, 画面の解像度, 画像の解像度, 解像度不明, 解像度の設定]
@@ -1015,7 +1015,7 @@ terms:
     yomi: はんだんじく
     category: cliche
     severity: info
-    evidence: {survey: 2026-11, ai: 1.27, human2021: 0.09, qiita2026: 1.0}
+    evidence: {survey: 2026-11, ai: 1.33, human2021: 0.09, qiita2026: 1.0}
     match:
       literal: [判断軸, 評価軸]
     why: 「軸」のたとえで、基準の中身が後回しになりやすい。
@@ -1030,7 +1030,7 @@ terms:
     yomi: ぜんぶいり
     category: cliche
     severity: info
-    evidence: {survey: 2026-11, ai: 3.24, human2021: 0.09, qiita2026: 0.27}
+    evidence: {survey: 2026-11, ai: 3.23, human2021: 0.09, qiita2026: 0.27}
     match:
       literal: [全部入り]
     why: どの機能や変更を入れたものかが書かれない。
@@ -1045,7 +1045,7 @@ terms:
     yomi: じょうせき
     category: cliche
     severity: info
-    evidence: {survey: 2026-11, ai: 1.2, human2021: 0.14, qiita2026: 0.67, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 定石 0.1%→1.8%'}
+    evidence: {survey: 2026-11, ai: 1.19, human2021: 0.14, qiita2026: 0.67, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 定石 0.1%→1.8%'}
     match:
       literal: [定石]
     why: 囲碁の言い方を借りた評価。何が標準的なのかが書かれない。
@@ -1060,7 +1060,7 @@ terms:
     yomi: ふかぼり
     category: cliche
     severity: info
-    evidence: {survey: 2026-11, ai: 1.13, human2021: 1.2, qiita2026: 2.89}
+    evidence: {survey: 2026-11, ai: 1.12, human2021: 1.2, qiita2026: 2.89}
     match:
       literal: [深掘, 深堀]
     why: 何をどこまで調べるのかが書かれない。
@@ -1075,7 +1075,7 @@ terms:
     yomi: つきあわせる
     category: cliche
     severity: info
-    evidence: {survey: 2026-11, ai: 3.17, human2021: 0.09, qiita2026: 1.52, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 突き合わせる 0.06%→3.7%'}
+    evidence: {survey: 2026-11, ai: 3.16, human2021: 0.09, qiita2026: 1.52, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 突き合わせる 0.06%→3.7%'}
     match:
       literal: [突き合わせ, 突合]
     why: 確認の言い回しとして多用される。何と何を比べて、何を確かめるのかを書く。
@@ -1090,7 +1090,7 @@ terms:
     yomi: とりちがえる
     category: cliche
     severity: info
-    evidence: {survey: 2026-11, ai: 4.99, human2021: 0.14, qiita2026: 0.7}
+    evidence: {survey: 2026-11, ai: 4.98, human2021: 0.14, qiita2026: 0.7}
     match:
       literal: [取り違え]
     why: 何を何と間違えたのかが書かれないことが多い。
@@ -1139,7 +1139,7 @@ terms:
     evidence: {survey: 2026-11, ai: 0.35, human2021: 0.07, qiita2026: 0.25}
     match:
       literal: [桁違い]
-    why: どれだけ違うのかを、数値ではなく評価の語で書いている。
+    why: どれだけ違うのかを、数値ではなく評価の言葉で書いている。
     suggest: [〇倍, はるかに大きい, 1桁多い（実際に1桁なら）]
     keep_when: []
     examples:
@@ -1229,7 +1229,7 @@ terms:
     yomi: てんじょう
     category: metaphor-noun
     severity: warn
-    evidence: {survey: 2026-11, ai: 7.74, human2021: 0.09, qiita2026: 0.82}
+    evidence: {survey: 2026-11, ai: 7.72, human2021: 0.09, qiita2026: 0.82}
     match:
       literal: [天井]
       exclude: [天井裏, 天井板]
@@ -1245,7 +1245,7 @@ terms:
     yomi: あいず
     category: metaphor-noun
     severity: warn
-    evidence: {survey: 2026-11, ai: 3.24, human2021: 0.05, qiita2026: 0.27}
+    evidence: {survey: 2026-11, ai: 3.37, human2021: 0.05, qiita2026: 0.27}
     match:
       literal: [合図]
     why: 処理どうしの通知を人の合図にたとえている。どの仕組みで何を知らせるのかが書かれない。
@@ -1290,7 +1290,7 @@ terms:
     yomi: あな
     category: metaphor-noun
     severity: warn
-    evidence: {survey: 2026-11, ai: 4.78, human2021: 0.92, qiita2026: 1.82}
+    evidence: {survey: 2026-11, ai: 4.77, human2021: 0.92, qiita2026: 1.82}
     match:
       regex: ['穴(?!(埋め|あき|あけ|開け|場|子))']
       exclude: [落とし穴, 節穴, 抜け穴, 鍵穴, 毛穴]
@@ -1308,7 +1308,7 @@ terms:
     yomi: かたち
     category: metaphor-noun
     severity: warn
-    evidence: {survey: 2026-11, ai: 29.26, human2021: 2.42, qiita2026: 6.08}
+    evidence: {survey: 2026-11, ai: 29.34, human2021: 2.42, qiita2026: 6.08}
     match:
       regex:
         - '(?<![一-龥々])(前の|今の|同じ|別の|どの|公式の|この|その|元の|新しい|古い|次の|有効にした|入れた|足した|直した|分けた|全部入りの|最終の|ふつうの|標準の)形(?![一-龥々])'
@@ -1330,7 +1330,7 @@ terms:
     yomi: そう
     category: metaphor-noun
     severity: warn
-    evidence: {survey: 2026-11, ai: 5.63, human2021: 4.24, qiita2026: 17.57, note: '人2021 の当たりの多くは機械学習の層と人の層。AI の文章では定着していない複合語（テナント層、MCP 層）と動詞で説明する形が多い'}
+    evidence: {survey: 2026-11, ai: 5.61, human2021: 4.24, qiita2026: 17.57, note: '人2021 の当たりの多くは機械学習の層と人の層。AI の文章では定着していない複合語（テナント層、MCP 層）と動詞で説明する形が多い'}
     match:
       literal: [層]
       exclude: [階層, 深層, 表層, 地層, 断層, 成層, 層別, 層状, 高層, 一層, 重層, 多層防御, 上層部, 下層階級, 層目, 年齢層, 世代層, 利用者層, 顧客層, ユーザー層, 読者層, 若年層, 富裕層, 経営層, 管理職層, マネージャー層, 得意層, 苦手層, 見習い層, 現場層, トップ層, 上位層]
@@ -1342,7 +1342,7 @@ terms:
         - '(第[0-9０-９一二三四五六七]+|L[1-7])\s?層'
     why: layer の直訳で、処理や部品を何でも「層」と呼んでいる。「API 層」「テナント層」「検証層」のような、定着していない複合語や、「〜を担う層」「〜を限る層」のように動詞で説明する形は、何がどこで何をするのかが分からない。
     suggest: [〇〇サーバー, 〇〇の処理, 〇〇を行う関数・モジュール, 〇〇の前に置くプロキシ, レイヤー（定着した文脈のとき）]
-    keep_when: [サービス層・ドメイン層など、レイヤードアーキテクチャの定着した層の名前, OSI 参照モデルの層, ニューラルネットワークの層, 階層・深層・年齢層などの定着した語]
+    keep_when: [サービス層・ドメイン層など、レイヤードアーキテクチャの定着した層の名前, OSI 参照モデルの層, ニューラルネットワークの層, 階層・深層・年齢層などの定着したワード]
     examples:
       - bad: API 層でトークンを検証する。
         good: API サーバーがリクエストを受け取ったときにトークンを検証する。
@@ -1356,7 +1356,7 @@ terms:
     yomi: かた
     category: metaphor-noun
     severity: warn
-    evidence: {survey: 2026-11, ai: 8.51, human2021: 0.14, qiita2026: 0.8}
+    evidence: {survey: 2026-11, ai: 8.56, human2021: 0.14, qiita2026: 0.8}
     match:
       regex:
         - '」型'
@@ -1382,7 +1382,7 @@ terms:
     yomi: じく
     category: metaphor-noun
     severity: warn
-    evidence: {survey: 2026-11, ai: 7.95, human2021: 2.86, qiita2026: 5.51}
+    evidence: {survey: 2026-11, ai: 8.07, human2021: 2.86, qiita2026: 5.51}
     match:
       literal: [軸]
       exclude_regex:
@@ -1429,7 +1429,7 @@ terms:
     yomi: どだい
     category: metaphor-noun
     severity: warn
-    evidence: {survey: 2026-11, ai: 4.64, human2021: 0.69, qiita2026: 6.28, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 土台 0.3%→5.5%'}
+    evidence: {survey: 2026-11, ai: 4.63, human2021: 0.69, qiita2026: 6.28, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 土台 0.3%→5.5%'}
     match:
       literal: [土台]
     why: 何の前提になるのかを「土台」のたとえで済ませている。
@@ -1444,7 +1444,7 @@ terms:
     yomi: てもと
     category: metaphor-noun
     severity: info
-    evidence: {survey: 2026-11, ai: 77.66, human2021: 1.5, qiita2026: 5.58}
+    evidence: {survey: 2026-11, ai: 77.55, human2021: 1.5, qiita2026: 5.58}
     match:
       regex: ['手元(で|の|に|から|では)']
     why: 自分の PC なのか、開発用のサーバーなのかが分からない。
@@ -1474,7 +1474,7 @@ terms:
     yomi: どうぐ
     category: metaphor-noun
     severity: info
-    evidence: {survey: 2026-11, ai: 9.07, human2021: 0.97, qiita2026: 6.3}
+    evidence: {survey: 2026-11, ai: 9.05, human2021: 0.97, qiita2026: 6.3}
     match:
       literal: [道具]
     why: 手段やツールを「道具」とまとめると、何に使うものかが書かれないことが多い。
@@ -1518,7 +1518,7 @@ terms:
     yomi: じこ
     category: metaphor-noun
     severity: info
-    evidence: {survey: 2026-11, ai: 3.24, human2021: 0.92, qiita2026: 6.01}
+    evidence: {survey: 2026-11, ai: 3.23, human2021: 0.92, qiita2026: 6.01}
     match:
       literal: [事故]
       exclude: [交通事故, 事故車, 労働災害]
@@ -1618,7 +1618,7 @@ terms:
     yomi: すの
     category: metaphor-modifier
     severity: warn
-    evidence: {survey: 2026-11, ai: 1.48, human2021: 0.16, qiita2026: 1.35}
+    evidence: {survey: 2026-11, ai: 1.47, human2021: 0.16, qiita2026: 1.35}
     match:
       regex: ['(?<![一-龥々])素の']
       exclude: [素のJavaScript, 素の JavaScript, 素のJS, 素の JS, 素のまま]
@@ -1636,7 +1636,7 @@ terms:
     yomi: うらで
     category: metaphor-modifier
     severity: info
-    evidence: {survey: 2026-11, ai: 6.05, human2021: 0.07, qiita2026: 0.22}
+    evidence: {survey: 2026-11, ai: 6.04, human2021: 0.07, qiita2026: 0.22}
     match:
       regex: ['裏で(回|動|走|待|実行|測|処理|進|流)']
     why: バックグラウンドで実行していることを「裏で」と言っている。何が、どのプロセスで動いているのかを書くと伝わる。

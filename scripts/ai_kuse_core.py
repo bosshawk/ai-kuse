@@ -1,4 +1,4 @@
-"""ai-kuse の共通処理: 語の一覧の読み込みと、本文からの検出。
+"""ai-kuse の共通処理: ワードの一覧の読み込みと、本文からの検出。
 
 check.py と validate.py から import する。PyYAML は呼び出し側のスクリプトが PEP 723 で宣言する。
 """
@@ -130,7 +130,7 @@ def git_root(start: Path) -> Path:
 
 
 def load_allow(start: Path, extra: Path | None = None) -> set[str]:
-    """プロジェクトで直さない語。.ai-kuse/allow.txt に、1行に id か語を書く。"""
+    """プロジェクトで直さないワード。.ai-kuse/allow.txt に、1行に id かワードを書く。"""
     allow: set[str] = set()
     candidates = [git_root(start) / ".ai-kuse" / "allow.txt"]
     if extra:
@@ -186,7 +186,7 @@ def find_in_line(line: str, term: Term) -> list[tuple[int, str]]:
             if any(s < xe and xs < e for xs, xe in ex_spans):
                 continue
             found.setdefault(s, m.group(0))
-    # 同じ語の別のパターンが重なって当たったとき（「この節では」）は、先に始まる1件だけを残す
+    # 同じワードの別のパターンが重なって当たったとき（「この節では」）は、先に始まる1件だけを残す
     result: list[tuple[int, str]] = []
     for s, text in sorted(found.items()):
         if result and s < result[-1][0] + len(result[-1][1]):

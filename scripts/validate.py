@@ -8,7 +8,7 @@
 - JSON Schema（schema/terms.schema.json）に合うか
 - id が全ファイルで重ならないか、category が categories にあるか
 - 正規表現がコンパイルできるか
-- examples の bad がその語に当たり、good が当たらないか
+- examples の bad がそのワードに当たり、good が当たらないか
 
 使い方: uv run --script scripts/validate.py [terms/tech.yaml ...]
 """
@@ -89,7 +89,7 @@ def main(argv: list[str]) -> int:
         print(f"\nエラー {len(errors)} 件", file=sys.stderr)
         return 1
     total = sum(len(load_raw(p)["terms"]) for p in paths)
-    print(f"OK: {len(paths)} ファイル、{total} 語")
+    print(f"OK: {len(paths)} ファイル、{total} 件のワード")
     return 0
 
 

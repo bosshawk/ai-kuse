@@ -1,12 +1,12 @@
 # ai-kuse
 
-AI が書いた日本語の文章によく出る語（AI の口癖）を見つけて、言い換えを提案する Claude Code のスキルです。語の一覧は YAML で管理します。
+AI が書いた日本語の文章によく出るワード（AI の口癖）を見つけて、言い換えを提案する Claude Code のスキルです。ワードの一覧は YAML で管理します。
 
 <!-- ai-kuse-disable -->
 たとえば「設定はこの YAML を正本とする」「詳細は次の節で説明する」のような文の「正本」「節」を見つけ、「基準にする」「セクション」のような候補を、文脈に合わせて出します。
 <!-- ai-kuse-enable -->
 
-[yomiyasu](https://github.com/nanaism/yomiyasu) が文章全体を推敲するのに対し、ai-kuse は語の選び方だけを扱います。併用するときは、ai-kuse で語を直してから yomiyasu をかけます。
+[yomiyasu](https://github.com/nanaism/yomiyasu) が文章全体を推敲するのに対し、ai-kuse はワードの選び方だけを扱います。併用するときは、ai-kuse でワードを直してから yomiyasu をかけます。
 
 ## しくみ
 
@@ -31,8 +31,8 @@ Claude Code で:
 |---|---|
 | `/ai-kuse docs/design.md` | 検出して提案する。ファイルは書き換えない |
 | `/ai-kuse fix docs/design.md` | 直すと決めた箇所をファイルに反映する |
-| `/ai-kuse add 語 言い換え` | 語を一覧に登録する |
-| `/ai-kuse list` | 登録済みの語を見る |
+| `/ai-kuse add ワード 言い換え` | ワードを一覧に登録する |
+| `/ai-kuse list` | 登録済みのワードを見る |
 
 CLI だけでも使えます。
 
@@ -44,7 +44,7 @@ uv run --script scripts/check.py docs/*.md
 uv run --script scripts/check.py --format json --severity warn --fail-on warn README.md
 ```
 
-## 語の一覧の書き方
+## ワードの一覧の書き方
 
 <!-- ai-kuse-disable -->
 ```yaml
@@ -55,7 +55,7 @@ terms:
     severity: warn                   # warn: 原則直す / info: 文脈しだい
     match:
       regex: ['(この|本|次の|前の)節', '節(では|で|に|を)']
-      exclude: [季節, 節約, 調節]      # 当たっても無視する語
+      exclude: [季節, 節約, 調節]      # 当たっても無視するワード
       exclude_regex: ['第?[0-9]+\s*節']
     why: 記事や README の区切りを「節」と呼ぶのは section の直訳。
     suggest: [セクション, 章, 以下]
@@ -72,11 +72,25 @@ terms:
 uv run --script scripts/validate.py
 ```
 
-今の一覧（`terms/tech.yaml`）は技術文書向けの104語です。出現頻度の調査（[research/2026-11-term-survey](research/2026-11-term-survey/README.md)）の結果を、各語の `evidence` に書いています。
+今の一覧（`terms/tech.yaml`）は技術文書向けで、ワードは104件です。出現頻度の調査（[research/2026-11-term-survey](research/2026-11-term-survey/README.md)）の結果を、各ワードの `evidence` に書いています。
+
+## ワードを足す前の調査
+
+`/ai-kuse survey <ワード>` で、AI の文章と人の文章での使い方と件数を比べてから足すかを決めます。手順と判断の基準は [references/survey.md](references/survey.md) にあります。CLI でも使えます。
+
+```bash
+uv run --script scripts/survey.py prepare
+```
+
+```bash
+uv run --script scripts/survey.py neighbors 層
+```
+
+文章群（会話ログと Qiita の記事）は `~/.cache/ai-kuse` に置き、リポジトリには入れません。
 
 ## プロジェクトごとの除外
 
-リポジトリの最上位に `.ai-kuse/allow.txt` を置くと、そこに書いた id か語は検出しません。1行だけ外すには行末に `<!-- ai-kuse-ignore -->`、範囲を外すには `<!-- ai-kuse-disable -->` と `<!-- ai-kuse-enable -->` で囲みます。
+リポジトリの最上位に `.ai-kuse/allow.txt` を置くと、そこに書いた id かワードは検出しません。1行だけ外すには行末に `<!-- ai-kuse-ignore -->`、範囲を外すには `<!-- ai-kuse-disable -->` と `<!-- ai-kuse-enable -->` で囲みます。
 
 ## テスト
 

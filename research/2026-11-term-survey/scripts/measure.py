@@ -123,5 +123,5 @@ for name,p in C.items():
     res.append(row)
 res.sort(key=lambda r:-r[-2])
 json.dump(res,open("measure.json","w"),ensure_ascii=False)
-print("語 | AI件,/10万字,文書 | H2021 | Q2026 | AI/H | Q/H")
+print("ワード | AI件,/10万字,文書 | H2021 | Q2026 | AI/H | Q/H")
 for r in res: print(r[0],"|",r[1:4],"|",r[4:7],"|",r[7:10],"|",r[10],r[11])

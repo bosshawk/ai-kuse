@@ -3,7 +3,7 @@
 # requires-python = ">=3.11"
 # dependencies = ["pyyaml>=6"]
 # ///
-"""AI の文章によく出る語を検出する。
+"""AI の文章によく出るワードを検出する。
 
 使い方:
   uv run --script scripts/check.py README.md docs/*.md
@@ -28,10 +28,10 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("files", nargs="*", type=Path, help="検査するファイル")
     ap.add_argument("--stdin", action="store_true", help="標準入力から読む")
-    ap.add_argument("--domain", action="append", help="使う語の一覧（terms/<domain>.yaml）。複数指定可。既定はすべて")
+    ap.add_argument("--domain", action="append", help="使うワードの一覧（terms/<domain>.yaml）。複数指定可。既定はすべて")
     ap.add_argument("--format", choices=["text", "json"], default="text")
     ap.add_argument("--severity", choices=["info", "warn"], default="info", help="この重さ以上だけ出す")
-    ap.add_argument("--allow", type=Path, help="追加の allow ファイル（1行に id か語）")
+    ap.add_argument("--allow", type=Path, help="追加の allow ファイル（1行に id かワード）")
     ap.add_argument("--fail-on", choices=["none", "info", "warn"], default="none", help="この重さの指摘があれば終了コード 1")
     args = ap.parse_args(argv)
 
@@ -40,7 +40,7 @@ def main(argv: list[str] | None = None) -> int:
 
     terms = load_terms(args.domain)
     if not terms:
-        print("語の一覧が見つかりません（terms/*.yaml）", file=sys.stderr)
+        print("ワードの一覧が見つかりません（terms/*.yaml）", file=sys.stderr)
         return 2
     allow = load_allow(Path.cwd(), args.allow)
 
