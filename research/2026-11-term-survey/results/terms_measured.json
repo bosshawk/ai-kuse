@@ -1140,6 +1140,34 @@
    "Q2026_docs": 21
   },
   {
+   "id": "ana",
+   "term": "穴",
+   "severity": "warn",
+   "AI_n": 68,
+   "H2021_n": 40,
+   "Q2026_n": 73,
+   "AI_per100k": 4.78,
+   "H2021_per100k": 0.92,
+   "Q2026_per100k": 1.82,
+   "AI_docs": 44,
+   "H2021_docs": 29,
+   "Q2026_docs": 42
+  },
+  {
+   "id": "katachi",
+   "term": "形",
+   "severity": "warn",
+   "AI_n": 416,
+   "H2021_n": 105,
+   "Q2026_n": 244,
+   "AI_per100k": 29.26,
+   "H2021_per100k": 2.42,
+   "Q2026_per100k": 6.08,
+   "AI_docs": 303,
+   "H2021_docs": 90,
+   "Q2026_docs": 172
+  },
+  {
    "id": "dodai",
    "term": "土台",
    "severity": "warn",
