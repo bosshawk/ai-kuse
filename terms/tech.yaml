@@ -1240,6 +1240,23 @@ terms:
       - bad: DB の CPU が天井に当たっている。
         good: DB の CPU 使用率が上限の 100% に達している。
 
+  - id: monosashi
+    term: 物差し
+    yomi: ものさし
+    category: metaphor-noun
+    severity: warn
+    evidence: {survey: 2026-11, ai: 1.12, human2021: 0.14, qiita2026: 0.95}
+    match:
+      literal: [物差し, ものさし, モノサシ]
+    why: 比べる基準や指標を「物差し」とたとえる言い方。何を、どの値で比べるのかが書かれない。
+    suggest: [基準, 指標, 評価の基準, 〇〇の値, 目盛り]
+    keep_when: [長さを測る道具としての物差し, 人の価値観を言う一般向けの文]
+    examples:
+      - bad: 人の仕事は、任せる仕組みと判断の物差しを作ることに移った。
+        good: 人の仕事は、任せる仕組みと、採否を決める基準を作ることに移った。
+      - bad: 3 つの方式を同じ物差しで並べてみます。
+        good: 3 つの方式を、同じテストでの処理時間で並べてみます。
+
   - id: aizu
     term: 合図
     yomi: あいず
