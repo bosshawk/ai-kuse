@@ -1,0 +1,532 @@
+# yaml-language-server: $schema=../schema/terms.schema.json
+#
+# 技術文書向けの語の一覧。
+# 1件ごとに、検出に使う match と、言い換えを判断するための why / suggest / keep_when / examples を持つ。
+# examples の bad は必ずその語に当たり、good は当たらないことを validate.py が確かめる。
+# 語を足したら: uv run --script scripts/validate.py
+#
+# 出現頻度はまだ測っていない（2026-11-23 時点。作成者が AI の技術文書でよく見ると判断した語）。
+
+version: 1
+domain: tech
+description: Web の技術記事、README、設計メモ、PR の説明など
+
+categories:
+  inflated-noun: 役割を大げさに呼ぶ名詞
+  doc-structure: 文書の区切りの直訳
+  metaphor-verb: 比喩の動詞
+  calque: 英語の直訳語
+  stiff-kango: 硬い漢語
+  cliche: 評価の決まり文句
+
+terms:
+  # ---- 役割を大げさに呼ぶ名詞 ----
+  - id: shohon
+    term: 正本
+    yomi: しょうほん
+    category: inflated-noun
+    severity: warn
+    match:
+      literal: [正本]
+    why: 元のファイルや基準のデータを「正本」と呼ぶと、唯一の正しい版という含みが加わる。技術文書では一般的でない。
+    suggest: [原本, 元のファイル, 基準にする（動詞で書き直す）, SSoT（読み手が知っている場合）]
+    keep_when: [法律・登記・公文書の正式な用語として使うとき]
+    examples:
+      - bad: 設定はこの YAML を正本とする。
+        good: 設定はこの YAML を基準にし、ほかのファイルはここから生成する。
+
+  - id: daicho
+    term: 台帳
+    yomi: だいちょう
+    category: inflated-noun
+    severity: warn
+    match:
+      literal: [台帳]
+    why: ただの一覧や表を「台帳」と呼ぶと、公的な記録のような重さが加わる。
+    suggest: [一覧, 管理表, リスト]
+    keep_when: [行政・会計の台帳（固定資産台帳など）]
+    examples:
+      - bad: 依存ライブラリの台帳を作る。
+        good: 依存ライブラリの一覧を作る。
+
+  - id: keiyaku
+    term: 契約
+    yomi: けいやく
+    category: inflated-noun
+    severity: warn
+    match:
+      literal: [契約]
+      exclude: [契約書, 契約者, 契約期間, 利用契約, 契約更新, 契約プラン]
+    why: API やモジュールの取り決めを「契約」と呼ぶのは contract の直訳。日本語の技術文書では仕様やインターフェースと書くことが多い。
+    suggest: [仕様, インターフェース定義, 取り決め, 型, コントラクト（Design by Contract の文脈）]
+    keep_when: [法的な契約, Design by Contract やコントラクトテストの説明で用語として使うとき]
+    examples:
+      - bad: この関数は入力が空でない契約になっている。
+        good: この関数は空でない入力を受け取る前提で書かれている。
+
+  - id: gate
+    term: ゲート
+    category: inflated-noun
+    severity: info
+    match:
+      literal: [ゲート]
+      exclude: [ゲートウェイ, ゲートキーパー]
+    why: 確認の段階を「ゲート」と呼ぶと、何を確かめて何を止めるのかが書かれないまま済んでしまう。
+    suggest: [チェック, 確認, 必須チェック（CI）]
+    keep_when: [品質ゲートのように定着した用語, ツールの機能名（Quality Gate など）]
+    examples:
+      - bad: レビューのゲートを通してからマージする。
+        good: レビューで承認を受けてからマージする。
+
+  - id: shireito
+    term: 司令塔
+    yomi: しれいとう
+    category: inflated-noun
+    severity: warn
+    match:
+      literal: [司令塔]
+    why: 処理を呼び出す関数やサービスを人の役割にたとえている。何を呼び、何を決めるのかが書かれない。
+    suggest: [全体を呼び出す処理, オーケストレーター, エントリーポイント]
+    keep_when: []
+    examples:
+      - bad: この関数が司令塔になり、各処理を順に呼ぶ。
+        good: この関数が各処理を順に呼ぶ。
+
+  - id: ichiji-joho
+    term: 一次情報
+    yomi: いちじじょうほう
+    category: inflated-noun
+    severity: info
+    match:
+      literal: [一次情報, 一次ソース]
+    why: 公式ドキュメントを読むことを「一次情報にあたる」と大げさに言う形が多い。何を見たかを書けば足りる。
+    suggest: [公式ドキュメント, 元の資料, リリースノート, ソースコード]
+    keep_when: [調査報告で一次資料と二次資料を分けて扱うとき（「一次資料」は定着した語なので検出しない）]
+    examples:
+      - bad: 必ず一次情報にあたって確認すること。
+        good: 必ず公式ドキュメントで確認すること。
+
+  # ---- 文書の区切りの直訳 ----
+  - id: setsu
+    term: 節
+    yomi: せつ
+    category: doc-structure
+    severity: warn
+    match:
+      regex:
+        - '(この|本|次の|前の|上の|下の|各|同|以下の|後の|別の|最後の)節'
+        - '節(では|で|に|を|の内容|で述べ|を参照)'
+      exclude: [季節, 節約, 調節, 関節, 節目, 節度, 節電, 節水, 節税, 使節, 文節, 音節, 節分, 時節, 礼節, 結節, 変節, 節穴, 節操]
+      exclude_regex: ['第?[0-9０-９]+([.．][0-9０-９]+)*\s*節']
+    why: 記事や README の区切りを「節」と呼ぶのは section の直訳。Web の技術文書では見出しやセクションと呼ぶことが多い。
+    suggest: [セクション, 章, 項, 以下, この見出し]
+    keep_when: [書籍・論文・仕様書で章節番号を振っているとき（RFC 9110 の 15.5 節 など）]
+    examples:
+      - bad: 詳細は次の節で説明する。
+        good: 詳細は次のセクションで説明する。
+      - bad: この節では設定方法を扱う。
+        good: ここでは設定方法を扱う。
+
+  - id: honko
+    term: 本稿
+    yomi: ほんこう
+    category: doc-structure
+    severity: info
+    match:
+      literal: [本稿]
+    why: 論文の言い方で、Web の記事や README では硬すぎる。
+    suggest: [この記事, この文書, ここでは]
+    keep_when: [論文, 学会誌の原稿]
+    examples:
+      - bad: 本稿では導入手順を扱う。
+        good: この記事では導入手順を扱う。
+
+  # ---- 比喩の動詞 ----
+  - id: yoseru
+    term: 寄せる
+    yomi: よせる
+    category: metaphor-verb
+    severity: warn
+    match:
+      regex: ['寄せ(る|て|た|ます|ました|られ|れば|よう|ない|ず)']
+      exclude: [取り寄せ, 押し寄せ, 引き寄せ, 呼び寄せ, 寄せ書き, 関心を寄せ, 期待を寄せ, 意見を寄せ, 心を寄せ, 身を寄せ, 問い合わせ]
+    why: 「1か所に寄せる」「実装を寄せる」は、まとめるのか、合わせるのか、移すのかが分からない。
+    suggest: [まとめる, 統一する, 合わせる, 移す]
+    keep_when: []
+    examples:
+      - bad: 設定を1か所に寄せる。
+        good: 設定を1つのファイルにまとめる。
+
+  - id: nigiru
+    term: 握る
+    yomi: にぎる
+    category: metaphor-verb
+    severity: warn
+    match:
+      regex: ['(仕様|要件|方針|期日|スケジュール|インターフェース|スコープ|前提)を(先に|事前に|最初に)?握(る|り|っ|ら|れ)']
+    why: 合意を「握る」と言う俗語。誰と何を決めたのかが書かれない。
+    suggest: [合意する, 決める, すり合わせる]
+    keep_when: []
+    examples:
+      - bad: 実装の前に仕様を握っておく。
+        good: 実装の前にチームで仕様を決めておく。
+
+  - id: hagasu
+    term: 剥がす
+    yomi: はがす
+    category: metaphor-verb
+    severity: info
+    match:
+      regex: ['剥が(す|し|さ|せ|そ)', 'はが(す|して|した|せる)']
+      exclude: [はがき, 引き剥が, 引きはが]
+    why: 依存や層を「剥がす」は、削除するのか、別のモジュールに分けるのかが曖昧になる。
+    suggest: [外す, 取り除く, 分離する]
+    keep_when: [シールや塗装など物理的に剥がすとき]
+    examples:
+      - bad: 古いライブラリへの依存を剥がす。
+        good: 古いライブラリへの依存を取り除く。
+
+  - id: kamaseru
+    term: 噛ませる
+    yomi: かませる
+    category: metaphor-verb
+    severity: info
+    match:
+      regex: ['噛ま(せ|す|し)', 'かませ(る|て|た|ます|れば)']
+    why: 間に処理を「噛ませる」は口語。どこに何を挟むかを書いたほうが伝わる。
+    suggest: [挟む, 経由させる, 間に入れる]
+    keep_when: []
+    examples:
+      - bad: API の前にプロキシを噛ませる。
+        good: API の前にプロキシを置き、リクエストを経由させる。
+
+  - id: chakuchi
+    term: 着地
+    yomi: ちゃくち
+    category: metaphor-verb
+    severity: warn
+    match:
+      literal: [着地]
+    why: 作業や議論の終わり方を「着地」とたとえる言い方。完了なのか、マージなのか、結論なのかが分からない。
+    suggest: [完了する, マージする, 結論を出す, 決まる]
+    keep_when: [物理的な着地（ドローンなど）]
+    examples:
+      - bad: 今週中に着地させたい。
+        good: 今週中にマージしたい。
+
+  - id: tabaneru
+    term: 束ねる
+    yomi: たばねる
+    category: metaphor-verb
+    severity: info
+    match:
+      regex: ['束ね(る|て|た|ます|ました|られ)']
+    why: 設定や処理を「束ねる」は、まとめ方（1ファイルにする、1関数にする）が書かれない。
+    suggest: [まとめる, 1つにする]
+    keep_when: []
+    examples:
+      - bad: 環境ごとの設定を束ねる。
+        good: 環境ごとの設定を1つのファイルにまとめる。
+
+  - id: kyushu
+    term: 吸収する
+    yomi: きゅうしゅう
+    category: metaphor-verb
+    severity: info
+    match:
+      regex: ['吸収(する|し|さ|でき|させ)']
+      exclude: [吸収合併, 衝撃を吸収, 水分を吸収, 熱を吸収, 光を吸収, 栄養を吸収]
+    why: 違いを「吸収する」は、何がどう変換されて呼び出し側から見えなくなるのかが書かれない。
+    suggest: [〜で差を埋める, 〜で変換する, 〜で対応する]
+    keep_when: []
+    examples:
+      - bad: OS ごとの差分はアダプタで吸収する。
+        good: OS ごとのパスの書き方の違いはアダプタで変換する。
+
+  - id: taosu
+    term: 倒す
+    yomi: たおす
+    category: metaphor-verb
+    severity: info
+    match:
+      regex: ['に倒(す|し|さ|せ|そ)']
+    why: 設定値を「true に倒す」は口語。有効にするのか、値を設定するのかを書けば足りる。
+    suggest: [有効にする, 無効にする, 〜に設定する]
+    keep_when: []
+    examples:
+      - bad: フラグを true に倒す。
+        good: フラグを true に設定する。
+
+  - id: hayasu
+    term: 生やす
+    yomi: はやす
+    category: metaphor-verb
+    severity: info
+    match:
+      regex: ['生や(す|し|さ|せ|そ)']
+      exclude: [ひげを生や, 髭を生や]
+    why: エンドポイントやメソッドを「生やす」は口語。追加すると書けば足りる。
+    suggest: [追加する, 作る, 定義する]
+    keep_when: []
+    examples:
+      - bad: 管理用のエンドポイントを生やす。
+        good: 管理用のエンドポイントを追加する。
+
+  # ---- 英語の直訳語 ----
+  - id: hyomenseki
+    term: 表面積
+    yomi: ひょうめんせき
+    category: calque
+    severity: warn
+    match:
+      literal: [表面積]
+    why: surface area の直訳。公開している範囲や、攻撃を受けうる範囲のことを言っている。
+    suggest: [公開範囲, 攻撃対象領域（アタックサーフェス）, API の数]
+    keep_when: [図形や物体の表面積]
+    examples:
+      - bad: 公開 API の表面積を小さく保つ。
+        good: 公開する API の数を少なく保つ。
+
+  - id: ikkyu-shimin
+    term: 一級市民
+    yomi: いっきゅうしみん
+    category: calque
+    severity: warn
+    match:
+      literal: [一級市民, 第一級市民]
+    why: first-class citizen の直訳。標準で扱える、という意味で使われることが多い。
+    suggest: [標準で対応する, 第一級オブジェクト（言語仕様の用語）]
+    keep_when: []
+    examples:
+      - bad: このフレームワークでは型が一級市民として扱われる。
+        good: このフレームワークは型を標準で扱える。
+
+  - id: haikan
+    term: 配管
+    yomi: はいかん
+    category: calque
+    severity: warn
+    match:
+      literal: [配管]
+    why: plumbing の直訳。何と何をつなぐ処理なのかが書かれない。
+    suggest: [接続処理, つなぎ込み, 連携の処理]
+    keep_when: [設備の配管]
+    examples:
+      - bad: 認証まわりの配管を整える。
+        good: 認証サーバーとの接続処理を整える。
+
+  - id: ashiba
+    term: 足場
+    yomi: あしば
+    category: calque
+    severity: info
+    match:
+      literal: [足場]
+    why: scaffold の直訳。ひな形の生成のことなら、そう書いたほうが伝わる。
+    suggest: [ひな形, 雛形の生成, scaffold]
+    keep_when: [建設現場の足場]
+    examples:
+      - bad: CLI でプロジェクトの足場を作る。
+        good: CLI でプロジェクトのひな形を作る。
+
+  - id: konseki
+    term: 痕跡
+    yomi: こんせき
+    category: calque
+    severity: warn
+    match:
+      literal: [痕跡]
+    why: trace の直訳。ログや記録のことを言っていることが多い。
+    suggest: [ログ, 記録, 履歴]
+    keep_when: [フォレンジックで攻撃の痕跡を調べるとき]
+    examples:
+      - bad: 実行の痕跡を残す。
+        good: 実行ログを残す。
+
+  - id: masatsu
+    term: 摩擦
+    yomi: まさつ
+    category: calque
+    severity: warn
+    match:
+      literal: [摩擦]
+    why: friction の直訳。何が手間なのか、どこで使いにくいのかが書かれない。
+    suggest: [手間, 使いにくさ, 手順の多さ]
+    keep_when: [物理の摩擦]
+    examples:
+      - bad: 導入時の摩擦を減らす。
+        good: 導入の手順を減らす。
+
+  - id: eisei
+    term: 衛生
+    yomi: えいせい
+    category: calque
+    severity: warn
+    match:
+      literal: [衛生]
+      exclude: [食品衛生, 公衆衛生, 衛生管理者]
+    why: hygiene の直訳。依存やコードを整理しておくことを言っている。
+    suggest: [整理, 管理, 手入れ]
+    keep_when: [食品・医療の衛生]
+    examples:
+      - bad: 依存関係の衛生を保つ。
+        good: 使っていない依存関係を定期的に削除する。
+
+  - id: sekimu
+    term: 責務
+    yomi: せきむ
+    category: calque
+    severity: info
+    match:
+      literal: [責務]
+    why: responsibility の訳。設計の用語としては定着しているが、AI の文章では役割の意味で多用されやすい。
+    suggest: [役割, 担当する処理]
+    keep_when: [単一責任の原則などの設計の用語として使うとき]
+    examples:
+      - bad: このクラスの責務はログの書き出しです。
+        good: このクラスはログを書き出します。
+
+  # ---- 硬い漢語 ----
+  - id: tanpo
+    term: 担保
+    yomi: たんぽ
+    category: stiff-kango
+    severity: warn
+    match:
+      literal: [担保]
+    why: 「品質を担保する」は何をすれば品質が保たれるのかが書かれない。言い換えるときは、確保か保証かで強さが変わる点に注意する。
+    suggest: [確保する, 保証する, 〜で確かめる]
+    keep_when: [金融・法律の担保]
+    examples:
+      - bad: テストで品質を担保する。
+        good: リリース前に全テストを通して、既存の機能が壊れていないことを確かめる。
+
+  # ---- 評価の決まり文句 ----
+  - id: kandokoro
+    term: 勘所
+    yomi: かんどころ
+    category: cliche
+    severity: warn
+    match:
+      literal: [勘所]
+    why: 大事な点がある、とだけ言って中身が後回しになる。
+    suggest: [注意点, 大事な点, 押さえる点]
+    keep_when: []
+    examples:
+      - bad: 設計の勘所をまとめる。
+        good: 設計で注意する点をまとめる。
+
+  - id: kimo
+    term: 肝
+    yomi: きも
+    category: cliche
+    severity: warn
+    match:
+      regex: ['肝(です|だ|になる|となる|になります|はここ|なのは|な点|は[、,])']
+      exclude: [肝心, 肝臓, 肝要, 肝試し]
+    why: 「ここが肝です」は重要だとだけ言い、なぜ重要かが書かれない。
+    suggest: [重要な点, 大事なのは〜だから]
+    keep_when: []
+    examples:
+      - bad: キャッシュの設定がこの構成の肝です。
+        good: この構成ではキャッシュの設定で応答時間が大きく変わります。
+
+  - id: otoshiana
+    term: 落とし穴
+    yomi: おとしあな
+    category: cliche
+    severity: warn
+    match:
+      literal: [落とし穴]
+    why: 何に気をつければよいかを、穴のたとえで済ませている。
+    suggest: [見落としやすい点, 注意点, よくある間違い]
+    keep_when: []
+    examples:
+      - bad: よくある落とし穴を紹介する。
+        good: よくある間違いを紹介する。
+
+  - id: sunao
+    term: 素直な
+    yomi: すなおな
+    category: cliche
+    severity: info
+    match:
+      regex: ['素直(な|に)(実装|書|作|考え|使|設計|方法|やり方)']
+    why: 「素直な実装」は、単純なのか、標準的なのか、遠回りしないのかが分からない。
+    suggest: [単純な, 標準的な, そのままの]
+    keep_when: []
+    examples:
+      - bad: まずは素直な実装で始める。
+        good: まずは単純な実装で始める。
+
+  - id: suji
+    term: 筋がいい
+    yomi: すじがいい
+    category: cliche
+    severity: warn
+    match:
+      regex: ['筋(が|の)(いい|良い|よい|良く|よく|悪い|わるい)']
+    why: 評価だけで、何が理にかなっているのかが書かれない。
+    suggest: [理にかなっている, 無理がない, 変更しやすい]
+    keep_when: []
+    examples:
+      - bad: この設計は筋がいい。
+        good: この設計は機能を足すときに変更する箇所が少ない。
+
+  - id: kaizodo
+    term: 解像度
+    yomi: かいぞうど
+    category: cliche
+    severity: warn
+    match:
+      literal: [解像度]
+      exclude: [画面解像度, 画像解像度, ディスプレイの解像度, 画面の解像度, 画像の解像度, 解像度不明, 解像度の設定]
+      exclude_regex: ['解像度\s*[・/／]\s*階調', '解像度\s*[0-9０-９]', '[0-9０-９]+\s*(dpi|ppi|px)']
+    why: 「解像度を上げる」は、何を具体的にするのかが書かれない。
+    suggest: [詳しくする, 具体的にする, 細かく分ける]
+    keep_when: [画像・画面・センサー・スキャナの解像度]
+    examples:
+      - bad: 要件の解像度を上げる。
+        good: 要件を画面ごとに具体的にする。
+
+  - id: ondokan
+    term: 温度感
+    yomi: おんどかん
+    category: cliche
+    severity: warn
+    match:
+      literal: [温度感]
+    why: 優先度、緊急度、熱意のどれを言っているのかが分からない。
+    suggest: [優先度, 緊急度, 関心の度合い]
+    keep_when: []
+    examples:
+      - bad: チームの温度感をそろえる。
+        good: チームで対応の優先度をそろえる。
+
+  - id: uchite
+    term: 打ち手
+    yomi: うちて
+    category: cliche
+    severity: warn
+    match:
+      literal: [打ち手]
+    why: コンサルタントの言い方で、技術文書では対策の中身を書いたほうが伝わる。
+    suggest: [対策, 次にすること, 改善案]
+    keep_when: []
+    examples:
+      - bad: 遅延への打ち手を考える。
+        good: 遅延への対策を考える。
+
+  - id: handanjiku
+    term: 判断軸
+    yomi: はんだんじく
+    category: cliche
+    severity: info
+    match:
+      literal: [判断軸]
+    why: 「軸」のたとえで、基準の中身が後回しになりやすい。
+    suggest: [判断の基準, 比べる観点]
+    keep_when: []
+    examples:
+      - bad: ライブラリを選ぶ判断軸を決める。
+        good: ライブラリを選ぶ基準を決める。
