@@ -1497,7 +1497,7 @@ terms:
     term: 土台
     yomi: どだい
     category: metaphor-noun
-    severity: warn
+    severity: info
     evidence: {survey: 2026-11, ai: 4.63, human2021: 0.69, qiita2026: 6.28, note: 'Qiita 7万件調査（nyosegawa, 2026-09）の記事割合 土台 0.3%→5.5%'}
     match:
       literal: [土台]
@@ -1507,6 +1507,24 @@ terms:
     examples:
       - bad: この設計が以降の実装の土台になる。
         good: 以降の実装はこの設計を前提にする。
+
+  - id: madoguchi
+    term: 窓口（システムの）
+    yomi: まどぐち
+    category: metaphor-noun
+    severity: info
+    evidence: {survey: 2026-11, ai: 0.28, human2021: 0.21, qiita2026: 2.14}
+    match:
+      literal: [窓口]
+      exclude: [サポート窓口, 運営窓口, 問い合わせ窓口, 問合せ窓口, 相談窓口, 受付窓口, 総合窓口, 保守窓口, 窓口アドレス]
+    why: サーバーや API、モジュールを、人が応対する「窓口」にたとえている。どのエンドポイントやサーバーが、何を受け付けるのかが書かれない。
+    suggest: [エンドポイント, 受け付けるサーバー, 入り口になる API, インターフェース, 〇〇を受ける s1]
+    keep_when: [人や組織が問い合わせを受ける窓口, 初心者向けに API をたとえて説明する文]
+    examples:
+      - bad: s1 は asia の窓口として画像と SSE を受ける。
+        good: s1 は asia の利用者からの画像と SSE のリクエストを受ける。
+      - bad: API Gateway が単一の窓口になる。
+        good: クライアントからのリクエストは、すべて API Gateway が受ける。
 
   - id: temoto
     term: 手元
