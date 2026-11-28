@@ -93,3 +93,25 @@ def test_sentence_line_numbers_follow_wrapped_lines(limits):
     md = "最初の短い文です。\n" + "とても長い文" * 20 + "です。\n"
     found = [f for f in tsumekomi.scan(md, "md", "t", None, limits) if f["id"] == "sentence"]
     assert found and found[0]["line"] == 2
+
+
+LEAD = ("このPCで使えそうな動画のモデルを、すぐ試せるものから導入が大変なものまで並べました。"
+        "テキストから作る動画（T2V）、画像から作る動画（I2V）、動きを別の動画やポーズから移すもの、音声付きのものを含みます。"
+        "どれも Web の情報です。"
+        "このPCではまだ試していません。")
+
+
+def test_four_sentence_paragraph_is_info(limits):
+    found = ids(LEAD + "\n", limits)
+    assert ("paragraph-sentences", "info") in found
+    assert ("paragraph-chars", "info") in found
+
+
+def test_short_paragraphs_are_left_alone(limits):
+    md = "結論を先に書きます。理由は2つです。\n\n次に、手順を書きます。\n"
+    assert ids(md, limits) == []
+
+
+def test_kaigyo_reference_exists():
+    ref = Path(tsumekomi.__file__).resolve().parent.parent / "references" / "kaigyo.md"
+    assert ref.exists()

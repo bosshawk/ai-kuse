@@ -1,0 +1,119 @@
+{
+  "ai": {
+    "docs": 3177,
+    "paragraphs": 10899,
+    "sentences_per_paragraph_%": {
+      "1": 48.1,
+      "2": 31.3,
+      "3": 14.8,
+      "4": 4.3,
+      "5": 1.0,
+      "6+": 0.4
+    },
+    "paragraphs_over_%": {
+      "120字": 9.9,
+      "200字": 1.4,
+      "4文以上": 5.8,
+      "6文以上": 0.4
+    },
+    "chars_per_paragraph": {
+      "median": 53,
+      "p90": 120,
+      "p99": 219
+    },
+    "source_lines": {
+      "lines": 11553,
+      "chars_median": 51,
+      "chars_p90": 112,
+      "ends_with_sentence_end_%": 77.6,
+      "one_sentence_per_line_%": 50.8,
+      "lines_in_multi_sentence_paragraphs_written_on_several_lines": 1040
+    },
+    "docs_with_one_sentence_run_%": {
+      ">=2": 9.9,
+      ">=3": 0.8,
+      ">=4": 0.1,
+      ">=5": 0.0,
+      ">=6": 0.0,
+      ">=8": 0.0
+    }
+  },
+  "human": {
+    "docs": 1465,
+    "paragraphs": 58118,
+    "sentences_per_paragraph_%": {
+      "1": 54.0,
+      "2": 25.8,
+      "3": 11.4,
+      "4": 4.8,
+      "5": 2.0,
+      "6+": 2.1
+    },
+    "paragraphs_over_%": {
+      "120字": 21.5,
+      "200字": 6.4,
+      "4文以上": 8.8,
+      "6文以上": 2.1
+    },
+    "chars_per_paragraph": {
+      "median": 66.0,
+      "p90": 170,
+      "p99": 360
+    },
+    "source_lines": {
+      "lines": 89320,
+      "chars_median": 41.0,
+      "chars_p90": 108,
+      "ends_with_sentence_end_%": 76.1,
+      "one_sentence_per_line_%": 80.6,
+      "lines_in_multi_sentence_paragraphs_written_on_several_lines": 41201
+    },
+    "docs_with_one_sentence_run_%": {
+      ">=2": 80.8,
+      ">=3": 57.0,
+      ">=4": 36.6,
+      ">=5": 22.7,
+      ">=6": 13.5,
+      ">=8": 5.3
+    }
+  },
+  "recent": {
+    "docs": 999,
+    "paragraphs": 58128,
+    "sentences_per_paragraph_%": {
+      "1": 55.6,
+      "2": 27.3,
+      "3": 11.4,
+      "4": 3.7,
+      "5": 1.2,
+      "6+": 0.8
+    },
+    "paragraphs_over_%": {
+      "120字": 14.7,
+      "200字": 3.0,
+      "4文以上": 5.8,
+      "6文以上": 0.8
+    },
+    "chars_per_paragraph": {
+      "median": 56.0,
+      "p90": 140,
+      "p99": 259
+    },
+    "source_lines": {
+      "lines": 70497,
+      "chars_median": 42,
+      "chars_p90": 119,
+      "ends_with_sentence_end_%": 82.6,
+      "one_sentence_per_line_%": 70.0,
+      "lines_in_multi_sentence_paragraphs_written_on_several_lines": 17416
+    },
+    "docs_with_one_sentence_run_%": {
+      ">=2": 86.4,
+      ">=3": 60.0,
+      ">=4": 38.0,
+      ">=5": 22.7,
+      ">=6": 14.9,
+      ">=8": 7.1
+    }
+  }
+}

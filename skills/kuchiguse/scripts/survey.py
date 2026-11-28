@@ -57,7 +57,11 @@ def _ai_docs(exclude_sessions: set[str]) -> list[tuple[str, str]]:
         if any(s in str(f) for s in exclude_sessions):
             continue
         session = f.parent.name + "/" + f.stem
-        for line in f.open(encoding="utf-8", errors="ignore"):
+        try:
+            lines = f.read_text(encoding="utf-8", errors="ignore").splitlines()
+        except OSError:  # Windows でパスが長すぎるファイルなど
+            continue
+        for line in lines:
             try:
                 d = json.loads(line)
             except json.JSONDecodeError:
@@ -110,7 +114,7 @@ def prepare(args) -> None:
     }
     corpus = {k: [(s, "\n".join(m for _, m, _ in visible_lines(t))) for s, t in v] for k, v in raw.items()}
     size = {k: sum(len(JA.findall(t)) for _, t in v) for k, v in corpus.items()}
-    CORPUS.write_text(json.dumps({"made": date.today().isoformat(), "size": size, "docs": corpus}, ensure_ascii=False))
+    CORPUS.write_text(json.dumps({"made": date.today().isoformat(), "size": size, "docs": corpus}, ensure_ascii=False), encoding="utf-8")
     for k in NAMES:
         print(f"{k:7} {len(corpus[k]):5} 件  日本語 {size[k]:,} 字")
     print(f"保存しました: {CORPUS}")
