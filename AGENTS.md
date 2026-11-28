@@ -106,4 +106,6 @@ uv run --script skills/naoshi/scripts/naoshi.py check README.md AGENTS.md skills
 
 1. `.claude-plugin/plugin.json` の `version` を上げる（同じ版のままだと、プラグインの利用者に更新が届かない）。
 2. テストと `claude plugin validate .` を通す。
-3. main に入れてから、同じ版のタグを打ち、`gh skill publish --tag v<版>` で GitHub のリリースを作る。
+3. main に入れて push してから、`gh skill publish --tag v<版>` でリリースを作る。
+
+タグは gh が作るので、先に打たない。打ってあると「tag already exists」で止まる。
