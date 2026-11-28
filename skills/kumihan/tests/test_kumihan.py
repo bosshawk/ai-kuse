@@ -68,3 +68,38 @@ def test_manual_br_in_middle_of_sentence():
 def test_br_after_period_is_fine():
     html = f'<main lang="ja">{JA}<p>開きます。<br>次に表示します。</p></main>'
     assert "manual-br" not in ids(html)
+
+
+def test_old_css_is_replaced():
+    v1 = '<style data-kumihan="ja-base">\n/* kumihan:ja-base v1 */\n:where([lang|="ja"]) { word-break: auto-phrase; }\n</style>\n'
+    html = f"<html lang=\"ja\"><head>\n{v1}</head><body>{JA}</body></html>"
+    assert ids(html) == ["old-base-css"]
+    new, done = kumihan.fix(html)
+    assert "kumihan:ja-base v1" not in new and new.count(kumihan.MARKER) == 1
+    assert done and ids(new) == []
+
+
+def test_body_text_is_not_phrase_wrapped():
+    css = kumihan.CSS_PATH.read_text(encoding="utf-8")
+    base = css.split("}")[0]  # [lang|="ja"] 全体への指定
+    assert "auto-phrase" not in base
+    assert '[data-kumihan~="phrase"]' in css
+
+
+def test_ch_width_becomes_ic():
+    html = (f'<main lang="ja"><style>.lead{{max-width:68ch;columns:2 20ch}} pre{{width: 80.5ch}}</style>'
+            f'<p class="lead" style="max-inline-size: 40ch">{JA}</p><p>max-width: 68ch と本文に書いた例</p></main>')
+    assert ids(html).count("ch-width") == 3
+    new, done = kumihan.fix(html)
+    assert ".lead{columns:2 20ch}" in new  # 上限は消す
+    assert 'style=""' in new
+    assert "width: 80.5ic" in new  # width は消さずに ic にする
+    assert "columns:2 20ch" in new  # 幅のプロパティ以外は変えない
+    assert "max-width: 68ch と本文に書いた例" in new  # 本文の文字は変えない
+    assert "ch-width" not in ids(new)
+    assert kumihan.fix(new) == (new, [])
+
+
+def test_ch_width_in_base_css_is_ignored():
+    new, _ = kumihan.fix(f"<main>{JA}</main>")
+    assert "ch-width" not in ids(new)

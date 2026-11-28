@@ -1,11 +1,18 @@
-/* kumihan:ja-base v1
+/* kumihan:ja-base v2
    日本語の折り返しと禁則だけを決める。色・フォント・余白・レイアウトには触れない。
-   lang 属性が ja の要素の中だけに効く（:where で詳細度 0 なので、ページ側の指定が勝つ）。 */
+   lang 属性が ja の要素の中だけに効く（:where で詳細度 0 なので、ページ側の指定が勝つ）。
+   本文は1字ごとに折り返して行末をそろえる。文節で折り返すのは、短い見出しやラベルだけ
+   （本文に使うと、文節の切れ目で行が早く終わり、右端がでこぼこになる）。 */
 :where([lang|="ja"]) {
-  word-break: auto-phrase;     /* 文節で折り返す（Chrome・Edge 119 以降。ほかは通常の折り返し） */
   line-break: strict;          /* 小書きの仮名や長音を行頭に置かない */
   overflow-wrap: break-word;   /* 長い URL などがはみ出すときだけ途中で折る */
   text-wrap: pretty;           /* 最後の行に1〜2字だけ残るのを避ける */
+}
+:where([lang|="ja"]) :where(p, li, dd, blockquote) {
+  text-align: justify;         /* 英数字の塊（「（T2V）、」など）の前で行が早く終わっても、右端をそろえる */
+}
+:where([lang|="ja"]) :where(h1, h2, h3, h4, h5, h6, caption, figcaption, summary, th, dt, label, button, [data-kumihan~="phrase"]) {
+  word-break: auto-phrase;     /* 文節で折り返す（Chrome・Edge 119 以降。ほかは1字ごと） */
 }
 :where([lang|="ja"]) :where(h1, h2, h3, h4, h5, h6, caption, figcaption, summary) {
   text-wrap: balance;          /* 見出しは行の長さをそろえる */
