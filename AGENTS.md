@@ -16,16 +16,16 @@
 
 | パス | 中身 |
 |---|---|
-| `skills/naoshi/` | ほかのスキルをまとめて呼ぶ。review も行う |
-| `skills/tsumekomi/` | 詰め込みを測る。目安は `limits.yaml` |
-| `skills/kumihan/` | 日本語の HTML の組版CSS |
-| `skills/katachi/` | 読みにくくなる状態の一覧 |
+| `skills/naoshi/` | ほかのスキルをまとめて呼ぶ。review も行う。下の表 |
+| `skills/tsumekomi/` | 詰め込みを測る。下の表 |
+| `skills/kumihan/` | 日本語の HTML の組版CSS。下の表 |
+| `skills/katachi/` | 読みにくくなる状態の一覧。`SKILL.md` だけ |
 | `skills/kuchiguse/` | AI の口癖のワード。下の表 |
 | `.claude-plugin/` | `plugin.json`（版とライセンス）と `marketplace.json` |
 | `hooks/hooks.json` | プラグインの hook の登録 |
 | `hooks/post_write.py` | hook の本体。`AI_KUSE_HOOK=1` のときだけ動く |
 | `shared/finding.schema.json` | 全スキル共通の指摘の書式 |
-| `tests/` | スキルをまたいだテスト |
+| `tests/` | スキルをまたいだテスト。スキルごとのテストは各スキルの `tests/` |
 | `install.sh` | 開発用。`skills/*` を symlink する |
 | `LICENSE` | MIT-0 |
 
@@ -44,7 +44,22 @@ kuchiguse は、もとは ai-kuse という名前でした。プラグイン名�
 | `references/survey.md` | ワードを足すときの調査の手順と判断の基準 |
 | `scripts/validate.py` | ワードの一覧の検査（schema、id の重複、正規表現、例文） |
 | `tests/` | pytest。`fixtures/should_not_hit.md` は誤検出を防ぐための文 |
-| `research/<年-月>-<題>/` | ワードの調査。README に方法・結果・偏りを書き、`results/` には件数だけを置く（記事の本文や会話ログは `data/` に置き、コミットしない） |
+| `research/<年-月>-<題>/` | ワードの調査 |
+
+naoshi・tsumekomi・kumihan の中身（パスは `skills/` からの相対）:
+
+| パス | 中身 |
+|---|---|
+| `naoshi/scripts/naoshi.py` | 各スキルの検出をまとめて出す CLI。書き換えの前後で数値・URL・名前が消えていないかも比べる |
+| `naoshi/references/review.md` | review で読み手役のエージェントに渡す観点 |
+| `tsumekomi/scripts/tsumekomi.py` | 詰め込みを測る CLI |
+| `tsumekomi/limits.yaml` | 長さの目安 |
+| `tsumekomi/references/kaigyo.md` | 文の終わりで改行するかの判断の基準 |
+| `tsumekomi/research/<年-月>-<題>/` | 目安を決めた調査。今は段落の形の調査だけ |
+| `kumihan/scripts/kumihan.py` | 組版を調べる CLI。`lang="ja"` と組版CSSは `fix` で入れる |
+| `kumihan/assets/ja-base.css` | 組版CSSの本体 |
+
+`research/` の置き方は、どのスキルでもそろえます。README に方法・結果・偏りを書き、`results/` には件数だけを置きます。記事の本文や会話ログは `data/` に置き、コミットしません。
 
 各スキルは単独でも動くようにする（symlink 先のフォルダしか見えないため）。naoshi と hook だけが、`skills/` の下のほかのスキルを読む。
 
