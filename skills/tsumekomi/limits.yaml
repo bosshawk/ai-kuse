@@ -1,0 +1,80 @@
+# tsumekomi の目安。どれも「これを超えると読み返しが増えやすい」という目安で、見せ方を決めるものではない。
+# 超えた数が info を上回れば info（文脈しだい）、warn を上回れば warn（原則書き換える）として出す。
+# 数値は仮。利用者が読みやすいと言った文書を測って調整する。
+
+profiles:
+  default: 読み物（計画、報告、設計メモ、説明）
+  reference: 調べるための文書（API の一覧、設定項目の表など）。表のセルの目安をゆるめる
+
+limits:
+  - id: heading
+    label: 見出し
+    target: heading
+    measure: chars
+    info: 25
+    warn: 40
+    why: 長い見出しは、見出しだけを拾い読みするときに中身がつかみにくい。
+    hint: [言い切る短い句にする, 補足を見出しの下の1文に移す]
+    keep_when: [書名や正式な名前をそのまま見出しにしている]
+
+  - id: sentence
+    label: 一文
+    target: sentence
+    measure: chars
+    info: 80
+    warn: 120
+    why: 長い文は、途中で主語や条件を見失いやすい。
+    hint: [2文に分ける, 条件を箇条書きにする]
+    keep_when: [引用や規約の条文をそのまま載せている]
+
+  - id: list-item
+    label: 箇条書きの1項目
+    target: list-item
+    measure: chars
+    info: 60
+    warn: 120
+    why: 1項目が長いと、箇条書きにした意味（拾い読み）が薄れる。
+    hint: [項目を分ける, 入れ子の箇条にする, 詳しい説明を本文に移す]
+    keep_when: [手順の1ステップで、分けると順番が分からなくなる]
+
+  - id: list-item-sentences
+    label: 箇条書きの1項目
+    target: list-item
+    measure: sentences
+    info: 2
+    warn: 3
+    why: 1項目に事実が3つ以上入ると、どれが要点か分かりにくい。
+    hint: [項目を分ける, 入れ子の箇条にする]
+    keep_when: [1つの事実を説明する補足の文が続いている]
+
+  - id: table-cell
+    label: 表のセル
+    target: table-cell
+    measure: chars
+    info: 30
+    warn: 60
+    profiles:
+      reference: {info: 60, warn: 120}
+    why: セルに説明文が入ると、列で見比べられなくなる。
+    hint: [列を足す, 短い語にして説明を表の下の注記に移す, 表をやめて見出しと本文にする]
+    keep_when: [説明そのものを調べるための表（用語集など）]
+
+  - id: card
+    label: カードの本文
+    target: card
+    measure: chars
+    info: 120
+    warn: 200
+    why: カードは見比べるための枠なので、長い本文が入ると枠の意味が薄れる。
+    hint: [要点だけ残して詳細を本文か表に移す, カードをやめて本文にする]
+    keep_when: [カードが1枚だけで、見比べる相手がいない]
+
+  - id: paragraph-sentences
+    label: 段落
+    target: paragraph
+    measure: sentences
+    info: 4
+    warn: 6
+    why: 段落が長いと、どこで話題が変わったか分かりにくい。
+    hint: [話題が変わる所で段落を分ける]
+    keep_when: [物語や経緯を順に語っている]

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bosshawk/ai-kuse/shared/finding.schema.json",
+  "title": "指摘（全スキル共通）",
+  "description": "各スキルの検出スクリプトが --format findings で出す形。naoshi はこの形のまま並べる。文書の見た目には関係しない、スキルどうしの内部の形。",
+  "type": "object",
+  "required": ["findings"],
+  "additionalProperties": false,
+  "properties": {
+    "findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    }
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "required": ["skill", "id", "path", "line", "severity", "text", "message"],
+      "additionalProperties": false,
+      "properties": {
+        "skill": { "type": "string", "enum": ["ai-kuse", "tsumekomi", "kumihan", "review"] },
+        "id": { "type": "string", "description": "ルールかワードの id" },
+        "path": { "type": "string" },
+        "line": { "type": "integer", "minimum": 0, "description": "1 始まり。ファイル全体への指摘は 0" },
+        "col": { "type": "integer", "minimum": 1 },
+        "severity": { "type": "string", "enum": ["info", "warn"], "description": "warn: 原則直す / info: 文脈しだい" },
+        "text": { "type": "string", "description": "指摘した箇所の本文（長いときは切り詰める）" },
+        "message": { "type": "string", "description": "何が読みにくいか" },
+        "measured": { "type": "number" },
+        "limit": { "type": "number" },
+        "hint": { "type": "array", "items": { "type": "string" }, "description": "直し方の候補。どれも使わず残してもよい" },
+        "keep_when": { "type": "array", "items": { "type": "string" } },
+        "fixable": { "type": "boolean", "description": "スクリプトだけで直せる（kumihan fix）" }
+      }
+    }
+  }
+}

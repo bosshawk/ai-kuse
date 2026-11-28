@@ -73,6 +73,25 @@ class Hit:
             "keep_when": t.keep_when,
         }
 
+    def to_finding(self) -> dict:
+        """全スキル共通の指摘の形（shared/finding.schema.json）。"""
+        t = self.term
+        msg = f"「{self.matched}」（{t.term}）: {t.why}"
+        if self.quoted:
+            msg += "（引用の中）"
+        return {
+            "skill": "ai-kuse",
+            "id": t.id,
+            "path": self.path,
+            "line": self.line,
+            "col": self.col,
+            "severity": t.severity,
+            "text": self.text.strip(),
+            "message": msg,
+            "hint": t.suggest,
+            "keep_when": t.keep_when,
+        }
+
 
 def load_raw(path: Path) -> dict:
     with path.open(encoding="utf-8") as f:

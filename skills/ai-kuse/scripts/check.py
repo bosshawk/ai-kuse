@@ -29,7 +29,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("files", nargs="*", type=Path, help="検査するファイル")
     ap.add_argument("--stdin", action="store_true", help="標準入力から読む")
     ap.add_argument("--domain", action="append", help="使うワードの一覧（terms/<domain>.yaml）。複数指定可。既定はすべて")
-    ap.add_argument("--format", choices=["text", "json"], default="text")
+    ap.add_argument("--format", choices=["text", "json", "findings"], default="text",
+                    help="findings は全スキル共通の形（shared/finding.schema.json）")
     ap.add_argument("--severity", choices=["info", "warn"], default="info", help="この重さ以上だけ出す")
     ap.add_argument("--allow", type=Path, help="追加の allow ファイル（1行に id かワード）")
     ap.add_argument("--fail-on", choices=["none", "info", "warn"], default="none", help="この重さの指摘があれば終了コード 1")
@@ -56,7 +57,10 @@ def main(argv: list[str] | None = None) -> int:
     rank = {"info": 0, "warn": 1}
     hits = [h for h in hits if rank[h.term.severity] >= rank[args.severity]]
 
-    if args.format == "json":
+    if args.format == "findings":
+        json.dump({"findings": [h.to_finding() for h in hits]}, sys.stdout, ensure_ascii=False, indent=2)
+        print()
+    elif args.format == "json":
         json.dump({"count": len(hits), "hits": [h.to_dict() for h in hits]}, sys.stdout, ensure_ascii=False, indent=2)
         print()
     else:
