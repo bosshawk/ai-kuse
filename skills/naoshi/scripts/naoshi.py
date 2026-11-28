@@ -3,7 +3,7 @@
 # requires-python = ">=3.11"
 # dependencies = ["pyyaml>=6"]
 # ///
-"""naoshi: kumihan・tsumekomi・ai-kuse の検出をまとめて出す。直す前後で情報が消えていないかも比べる。
+"""naoshi: kumihan・tsumekomi・kuchiguse の検出をまとめて出す。直す前後で情報が消えていないかも比べる。
 
 使い方:
   uv run --script scripts/naoshi.py check docs/plan.md page.html
@@ -29,7 +29,7 @@ from pathlib import Path
 from types import ModuleType
 
 SKILLS_ROOT = Path(__file__).resolve().parent.parent.parent
-ORDER = ["kumihan", "tsumekomi", "ai-kuse"]  # 直す順（全自動 → 構造 → 語）
+ORDER = ["kumihan", "tsumekomi", "kuchiguse"]  # 直す順（全自動 → 構造 → 語）
 MD_EXT = {".md", ".markdown"}
 HTML_EXT = {".html", ".htm"}
 
@@ -51,12 +51,12 @@ class Checkers:
     def __init__(self, root: Path = SKILLS_ROOT) -> None:
         self.kumihan = _load("naoshi_kumihan", root / "kumihan" / "scripts" / "kumihan.py")
         self.tsumekomi = _load("naoshi_tsumekomi", root / "tsumekomi" / "scripts" / "tsumekomi.py")
-        self.ai_kuse = _load("naoshi_ai_kuse_core", root / "ai-kuse" / "scripts" / "ai_kuse_core.py")
-        self._terms = None
+        self.ai_kuse = _load("naoshi_ai_kuse_core", root / "kuchiguse" / "scripts" / "ai_kuse_core.py")
+        self._terms: dict[Path, list] = {}  # git リポジトリの最上位ごと（プロジェクトで足したワードが違う）
         self._limits = None
 
     def available(self) -> list[str]:
-        return [n for n, m in (("kumihan", self.kumihan), ("tsumekomi", self.tsumekomi), ("ai-kuse", self.ai_kuse)) if m]
+        return [n for n, m in (("kumihan", self.kumihan), ("tsumekomi", self.tsumekomi), ("kuchiguse", self.ai_kuse)) if m]
 
     def check(self, path: Path, only: list[str] | None = None, text: str | None = None) -> list[dict]:
         text = path.read_text(encoding="utf-8") if text is None else text
@@ -70,11 +70,13 @@ class Checkers:
                 self._limits, _ = self.tsumekomi.load_limits()
             kind = "html" if ext in HTML_EXT else "md"
             out += self.tsumekomi.scan(text, kind, str(path), None, self._limits)
-        if "ai-kuse" in use and self.ai_kuse:
-            if self._terms is None:
-                self._terms = self.ai_kuse.load_terms()
-            allow = self.ai_kuse.load_allow(path.resolve().parent)
-            out += [h.to_finding() for h in self.ai_kuse.scan(text, self._terms, str(path), allow)]
+        if "kuchiguse" in use and self.ai_kuse:
+            here = path.resolve().parent
+            root = self.ai_kuse.git_root(here)
+            if root not in self._terms:
+                self._terms[root] = self.ai_kuse.load_terms(None, here)
+            allow = self.ai_kuse.load_allow(here)
+            out += [h.to_finding() for h in self.ai_kuse.scan(text, self._terms[root], str(path), allow)]
         return out
 
 
@@ -137,7 +139,7 @@ def main(argv: list[str] | None = None) -> int:
     sub = ap.add_subparsers(dest="command", required=True)
     c = sub.add_parser("check", help="全スキルの検出をまとめて出す")
     c.add_argument("files", nargs="+", type=Path)
-    c.add_argument("--only", help="カンマ区切りで使うスキルを絞る（kumihan,tsumekomi,ai-kuse）")
+    c.add_argument("--only", help="カンマ区切りで使うスキルを絞る（kumihan,tsumekomi,kuchiguse）")
     c.add_argument("--severity", choices=["info", "warn"], default="info")
     c.add_argument("--format", choices=["text", "findings"], default="text")
     s = sub.add_parser("snapshot", help="直す前に数値・URL・名前を控える")

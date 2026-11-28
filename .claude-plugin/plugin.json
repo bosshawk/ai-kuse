@@ -1,0 +1,13 @@
+{
+  "name": "ai-kuse",
+  "version": "0.1.0",
+  "description": "AI が書いた日本語の文書の癖（口癖のワード、表やカードへの詰め込み、語の途中での折り返し）を測って、読みやすく書き換えるスキル集",
+  "author": {
+    "name": "bosshawk",
+    "url": "https://github.com/bosshawk"
+  },
+  "homepage": "https://github.com/bosshawk/ai-kuse",
+  "repository": "https://github.com/bosshawk/ai-kuse",
+  "license": "MIT-0",
+  "keywords": ["japanese", "writing", "readability", "documentation", "html", "日本語"]
+}

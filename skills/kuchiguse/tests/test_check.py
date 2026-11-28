@@ -83,3 +83,40 @@ def test_project_allow_file(tmp_path, capsys, monkeypatch):
     f.write_text("よくある落とし穴。\n", encoding="utf-8")
     assert check.main([str(f), "--fail-on", "info"]) == 0
     assert "指摘なし" in capsys.readouterr().out
+
+
+LOCAL_TERMS = """version: 1
+domain: local
+categories:
+  local: 利用者が足したワード
+terms:
+  - id: local-kuse
+    term: ほげ語
+    category: local
+    severity: warn
+    match:
+      literal: [ほげ語]
+    why: テスト用のワード。
+    suggest: [ふつうの語]
+    examples:
+      - bad: ここでほげ語を使う。
+        good: ここでふつうの語を使う。
+"""
+
+
+@pytest.mark.parametrize("where", ["project", "user"])
+def test_user_added_terms_are_loaded(tmp_path, capsys, monkeypatch, where):
+    home = tmp_path / "home"
+    proj = tmp_path / "proj"
+    proj.mkdir()
+    monkeypatch.setenv("AI_KUSE_HOME", str(home))
+    target = (proj / ".ai-kuse" / "terms") if where == "project" else (home / "terms")
+    target.mkdir(parents=True)
+    (target / "local.yaml").write_text(LOCAL_TERMS, encoding="utf-8")
+    assert validate.validate([target / "local.yaml"]) == []
+    monkeypatch.chdir(proj)
+    f = proj / "a.md"
+    f.write_text("ここでほげ語を使う。\n", encoding="utf-8")
+    assert check.main([str(f), "--format", "json"]) == 0
+    ids = [h["id"] for h in json.loads(capsys.readouterr().out)["hits"]]
+    assert "local-kuse" in ids

@@ -7,10 +7,11 @@
 
 Markdown か HTML が保存されたら:
   1. HTML なら kumihan fix を実行する（lang="ja" と組版CSS。スクリプトだけで直る）
-  2. tsumekomi と ai-kuse の warn を上位5件まで、Claude に返す（終了コード 2）
+  2. tsumekomi と kuchiguse の warn を上位5件まで、Claude に返す（終了コード 2）
 
 判断が要るもの（info、review）は返さない。指摘をゼロにさせる hook ではない。
-環境変数 AI_KUSE_HOOK=0 で止まる。
+初めは止まっている。環境変数 AI_KUSE_HOOK=1 のときだけ動く（プラグインを入れた人全員に
+勝手に効かないように）。settings.json の "env" に書けば有効になる。
 """
 
 from __future__ import annotations
@@ -36,7 +37,7 @@ def load_naoshi():
 
 
 def run(payload: dict) -> tuple[int, str]:
-    if os.environ.get("AI_KUSE_HOOK", "1") == "0":
+    if os.environ.get("AI_KUSE_HOOK") != "1":
         return 0, ""
     tool_input = payload.get("tool_input") or {}
     file_path = tool_input.get("file_path")
@@ -57,7 +58,7 @@ def run(payload: dict) -> tuple[int, str]:
             path.write_text(new, encoding="utf-8", newline="")
             notes.append(f"kumihan が {path.name} を書き換えた（{'、'.join(done)}）。次に編集する前に読み直すこと。")
 
-    found = [f for f in ck.check(path, ["tsumekomi", "ai-kuse"]) if f["severity"] == "warn"]
+    found = [f for f in ck.check(path, ["tsumekomi", "kuchiguse"]) if f["severity"] == "warn"]
     found = naoshi.sort_findings(found)
     if found:
         notes.append(

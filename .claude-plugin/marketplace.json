@@ -1,0 +1,14 @@
+{
+  "name": "ai-kuse",
+  "owner": {
+    "name": "bosshawk",
+    "url": "https://github.com/bosshawk"
+  },
+  "plugins": [
+    {
+      "name": "ai-kuse",
+      "source": "./",
+      "description": "AI が書いた日本語の文書の癖を測って、読みやすく書き換えるスキル集（naoshi・tsumekomi・kuchiguse・kumihan・katachi）"
+    }
+  ]
+}

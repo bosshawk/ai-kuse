@@ -1,6 +1,6 @@
 # ai-kuse
 
-AI が書いた日本語の文書によく出る癖を見つけて、読みやすく書き換えるための Claude Code のスキル集です。語の癖（AI の口癖）のほかに、語の途中での折り返しや、表・カード・箇条書きへの詰め込みも扱います。
+AI が書いた日本語の文書によく出る癖を見つけて、読みやすく書き換えるためのスキル集です。語の癖（AI の口癖）のほかに、語の途中での折り返しや、表・カード・箇条書きへの詰め込みも扱います。Claude Code のプラグインとして入れるのがおすすめですが、Agent Skills に対応したほかのエージェントでも使えます。
 
 最初に書くときにルールを守らせるのは難しいので、書いたあとにスクリプトで測って書き換える作りにしています。測るのはスクリプトで、書き換えるか残すかは Claude が文脈で決めます。見せ方（表にするか、箇条にするか）はそろえません。
 
@@ -8,9 +8,9 @@ AI が書いた日本語の文書によく出る癖を見つけて、読みや�
 
 | スキル | 扱うこと | いつ使うか |
 |---|---|---|
-| [naoshi](skills/naoshi/SKILL.md) | ほかのスキルをまとめて呼ぶ。review も行う | `/naoshi` で呼ぶ |
+| [naoshi](skills/naoshi/SKILL.md) | ほかのスキルをまとめて呼ぶ。review も行う | 呼び出して使う |
 | [tsumekomi](skills/tsumekomi/SKILL.md) | 表のセル・カード・箇条・一文の詰め込み | 書いたあと |
-| [ai-kuse](skills/ai-kuse/SKILL.md) | AI の口癖のワード | 書いたあと |
+| [kuchiguse](skills/kuchiguse/SKILL.md) | AI の口癖のワード | 書いたあと |
 | [kumihan](skills/kumihan/SKILL.md) | 日本語の HTML の折り返し（組版CSS） | HTML を書くとき（自動） |
 | [katachi](skills/katachi/SKILL.md) | 読みにくくなる状態の一覧 | 書く前（自動） |
 
@@ -20,22 +20,51 @@ AI が書いた日本語の文書によく出る癖を見つけて、読みや�
 
 1. kumihan: `lang="ja"` と組版CSSを入れる（スクリプトだけで済む）
 2. tsumekomi: 詰め込みを分ける
-3. ai-kuse: ワードを言い換える
+3. kuchiguse: ワードを言い換える
 4. 測り直し、数値・URL・名前が消えていないか比べる
 
 ## インストール
+
+どの方法でも [uv](https://docs.astral.sh/uv/) が要ります（PyYAML は実行時に uv が入れます）。
+
+### Claude Code（おすすめ）
+
+```
+/plugin install ai-kuse --marketplace bosshawk/ai-kuse
+```
+
+Claude Code 2.1.275 より前なら、2行に分けます。
+
+```
+/plugin marketplace add bosshawk/ai-kuse
+/plugin install ai-kuse@ai-kuse
+```
+
+プラグインとして入れると、5つのスキルがまとめて入り、hook も使えます。スキルは `/ai-kuse:naoshi` のように、プラグイン名を付けて呼びます。更新は `/plugin update ai-kuse@ai-kuse` です。
+
+### ほかのエージェント（Codex、Cursor、Copilot など）
+
+```bash
+npx skills add bosshawk/ai-kuse --skill '*'
+```
+
+```bash
+gh skill install bosshawk/ai-kuse --all --scope user
+```
+
+naoshi はほかのスキルを読むので、5つまとめて入れてください。この方法では hook は入りません。SKILL.md の手順は Claude Code を前提に書いているため、ほかのエージェントではスクリプトのパスを読み替える必要があることがあります。
+
+### 開発する人
 
 ```bash
 ./install.sh
 ```
 
-`~/.claude/skills/<スキル名>` から、このリポジトリの `skills/<スキル名>` へ symlink を張ります。必要なのは [uv](https://docs.astral.sh/uv/) だけです（PyYAML は実行時に uv が入れます）。
-
-Windows の Git Bash では、symlink を作るのに開発者モードが要ります。
+`~/.claude/skills/<スキル名>` から、このリポジトリの `skills/<スキル名>` へ symlink を張ります。書き換えがすぐに反映されます。プラグインと両方入れると同じスキルが2つ並ぶので、どちらか一方にしてください。Windows の Git Bash では、symlink を作るのに開発者モードが要ります。
 
 ## 使い方
 
-Claude Code で:
+Claude Code で（プラグインなら `/ai-kuse:naoshi` のように呼びます）:
 
 | 呼び出し | すること |
 |---|---|
@@ -43,7 +72,7 @@ Claude Code で:
 | `/naoshi fix docs/plan.md` | 決まった順に書き換え、測り直す |
 | `/naoshi review docs/plan.md` | 書いた会話を知らない別のエージェントが、読み手として読む |
 | `/tsumekomi docs/plan.md` | 詰め込みだけを見る |
-| `/ai-kuse docs/plan.md` | ワードだけを見る |
+| `/kuchiguse docs/plan.md` | ワードだけを見る |
 
 CLI だけでも使えます。
 
@@ -57,30 +86,24 @@ uv run --script skills/kumihan/scripts/kumihan.py fix page.html
 
 ## hook
 
-`~/.claude/settings.json` に次を足すと、Markdown と HTML を保存するたびに測ります（install.sh を実行すると、このリポジトリのパスを入れた設定が表示されます）。
+Markdown と HTML を保存するたびに測る hook があります。入れた人全員に勝手に効かないよう、初めは止まっています。使うときは `~/.claude/settings.json` に次を足します。
 
 ```json
-"hooks": {
-  "PostToolUse": [
-    {
-      "matcher": "Write|Edit|MultiEdit",
-      "hooks": [
-        { "type": "command", "command": "uv run --script \"/path/to/ai-kuse/hooks/post_write.py\"" }
-      ]
-    }
-  ]
+{
+  "env": { "AI_KUSE_HOOK": "1" }
 }
 ```
 
 - HTML なら、kumihan fix が自動で入ります。
-- tsumekomi と ai-kuse の warn を上位5件まで Claude に返します。info や review は返しません。
-- 環境変数 `AI_KUSE_HOOK=0` で止まります。
+- tsumekomi と kuchiguse の warn を上位5件まで Claude に返します。info や review は返しません。
+
+プラグインなら hook の登録は済んでいるので、上の設定だけで動きます。install.sh で入れた場合は、hook の登録も要ります（install.sh を実行すると設定例が表示されます）。
 
 ## 全スキル共通の指摘
 
 各スキルの検出スクリプトは、`--format findings` で同じ JSON を出します（[shared/finding.schema.json](shared/finding.schema.json)）。naoshi はこれを並べるだけです。スキルどうしの内部の書式なので、文書の見た目には関係しません。
 
-## ai-kuse: AI の口癖のワード
+## kuchiguse: AI の口癖のワード
 
 <!-- ai-kuse-disable -->
 たとえば「設定はこの YAML を正本とする」「詳細は次の節で説明する」のような文の「正本」「節」を見つけ、「基準にする」「セクション」のような候補を、文脈に合わせて出します。
@@ -88,13 +111,13 @@ uv run --script skills/kumihan/scripts/kumihan.py fix page.html
 
 | 呼び出し | すること |
 |---|---|
-| `/ai-kuse docs/design.md` | 検出して提案する。ファイルは書き換えない |
-| `/ai-kuse fix docs/design.md` | 言い換えると決めた箇所をファイルに反映する |
-| `/ai-kuse add ワード 言い換え` | ワードを一覧に登録する |
-| `/ai-kuse list` | 登録済みのワードを見る |
+| `/kuchiguse docs/design.md` | 検出して提案する。ファイルは書き換えない |
+| `/kuchiguse fix docs/design.md` | 言い換えると決めた箇所をファイルに反映する |
+| `/kuchiguse add ワード 言い換え` | ワードを一覧に登録する |
+| `/kuchiguse list` | 登録済みのワードを見る |
 
 ```bash
-uv run --script skills/ai-kuse/scripts/check.py --format json --severity warn --fail-on warn README.md
+uv run --script skills/kuchiguse/scripts/check.py --format json --severity warn --fail-on warn README.md
 ```
 
 方針を決めたときの比較は [設計案](https://claude.ai/artifact/FmbVMetuhF5ALZVPcoCrWx)（非公開）にあります。
@@ -124,21 +147,32 @@ terms:
 足したら検査します。
 
 ```bash
-uv run --script skills/ai-kuse/scripts/validate.py
+uv run --script skills/kuchiguse/scripts/validate.py
 ```
 
-今の一覧（`skills/ai-kuse/terms/tech.yaml`）は技術文書向けで、ワードは109件です。出現頻度の調査（[research/2026-11-term-survey](skills/ai-kuse/research/2026-11-term-survey/README.md)）の結果を、各ワードの `evidence` に書いています。
+今の一覧（`skills/kuchiguse/terms/tech.yaml`）は技術文書向けで、ワードは109件です。出現頻度の調査（[research/2026-11-term-survey](skills/kuchiguse/research/2026-11-term-survey/README.md)）の結果を、各ワードの `evidence` に書いています。
+
+### 自分のワードを足す
+
+プラグインや npx skills で入れたスキルのフォルダは、更新で置き換わります。`/kuchiguse add` で足したワードは、その外の次の場所に書かれ、同梱の一覧と一緒に読まれます。
+
+| 場所 | 効く範囲 |
+|---|---|
+| `<リポジトリの最上位>/.ai-kuse/terms/*.yaml` | そのプロジェクトだけ |
+| `~/.ai-kuse/terms/*.yaml` | すべてのプロジェクト（`AI_KUSE_HOME` で変えられる） |
+
+書き方は同梱の一覧と同じです。よく使われるワードなら、このリポジトリへの提案も歓迎します。
 
 ### ワードを足す前の調査
 
-`/ai-kuse survey <ワード>` で、AI の文章と人の文章での使い方と件数を比べてから足すかを決めます。手順と判断の基準は [references/survey.md](skills/ai-kuse/references/survey.md) にあります。
+`/kuchiguse survey <ワード>` で、AI の文章と人の文章での使い方と件数を比べてから足すかを決めます。手順と判断の基準は [references/survey.md](skills/kuchiguse/references/survey.md) にあります。
 
 ```bash
-uv run --script skills/ai-kuse/scripts/survey.py prepare
+uv run --script skills/kuchiguse/scripts/survey.py prepare
 ```
 
 ```bash
-uv run --script skills/ai-kuse/scripts/survey.py neighbors 層
+uv run --script skills/kuchiguse/scripts/survey.py neighbors 層
 ```
 
 文章群（会話ログと Qiita の記事）は `~/.cache/ai-kuse` に置き、リポジトリには入れません。
@@ -151,13 +185,21 @@ uv run --script skills/ai-kuse/scripts/survey.py neighbors 層
 
 | スキル | 1行だけ外す | 範囲を外す |
 |---|---|---|
-| ai-kuse | 行末に `<!-- ai-kuse-ignore -->` | `<!-- ai-kuse-disable -->` 〜 `<!-- ai-kuse-enable -->` |
+| kuchiguse | 行末に `<!-- ai-kuse-ignore -->` | `<!-- ai-kuse-disable -->` 〜 `<!-- ai-kuse-enable -->` |
 | tsumekomi | 行末に `<!-- tsumekomi-ignore -->` | `<!-- tsumekomi-disable -->` 〜 `<!-- tsumekomi-enable -->` |
 
-ai-kuse は、リポジトリの最上位に `.ai-kuse/allow.txt` を置くと、そこに書いた id かワードを検出しません。
+kuchiguse は、リポジトリの最上位に `.ai-kuse/allow.txt` を置くと、そこに書いた id かワードを検出しません。
 
 ## テスト
 
 ```bash
 uv run --with pytest --with pyyaml --with jsonschema pytest -q
 ```
+
+```bash
+claude plugin validate .
+```
+
+## ライセンス
+
+[MIT No Attribution（MIT-0）](LICENSE)。著作権の表示を残す必要もなく、自由に使い、書き換え、配れます。

@@ -5,6 +5,7 @@ check.py と validate.py から import する。PyYAML は呼び出し側のス�
 
 from __future__ import annotations
 
+import os
 import re
 import subprocess
 from dataclasses import dataclass, field
@@ -80,7 +81,7 @@ class Hit:
         if self.quoted:
             msg += "（引用の中）"
         return {
-            "skill": "ai-kuse",
+            "skill": "kuchiguse",
             "id": t.id,
             "path": self.path,
             "line": self.line,
@@ -98,8 +99,28 @@ def load_raw(path: Path) -> dict:
         return yaml.safe_load(f)
 
 
-def terms_files(domains: list[str] | None = None) -> list[Path]:
+def extra_terms_dirs(start: Path | None = None) -> list[Path]:
+    """利用者が足したワードの置き場所。スキルのフォルダはプラグインの更新で置き換わるので、その外に置く。
+
+    - ~/.ai-kuse/terms/*.yaml（すべてのプロジェクト。AI_KUSE_HOME で変えられる）
+    - <git リポジトリの最上位>/.ai-kuse/terms/*.yaml（そのプロジェクトだけ）
+    """
+    home = Path(os.environ.get("AI_KUSE_HOME") or Path.home() / ".ai-kuse")
+    dirs = [home / "terms"]
+    if start is not None:
+        dirs.append(git_root(start) / ".ai-kuse" / "terms")
+    return dirs
+
+
+def terms_files(domains: list[str] | None = None, start: Path | None = None) -> list[Path]:
     files = sorted(TERMS_DIR.glob("*.yaml"))
+    seen = {p.resolve() for p in files}
+    for d in extra_terms_dirs(start):
+        if d.is_dir():
+            for p in sorted(d.glob("*.yaml")):
+                if p.resolve() not in seen:
+                    seen.add(p.resolve())
+                    files.append(p)
     if domains:
         files = [p for p in files if p.stem in domains]
     return files
@@ -127,9 +148,10 @@ def compile_term(raw: dict, domain: str, categories: dict) -> Term:
     )
 
 
-def load_terms(domains: list[str] | None = None) -> list[Term]:
+def load_terms(domains: list[str] | None = None, start: Path | None = None) -> list[Term]:
+    """同梱の一覧に、利用者が足した一覧（extra_terms_dirs）を加えて読む。start は対象ファイルの場所。"""
     terms: list[Term] = []
-    for path in terms_files(domains):
+    for path in terms_files(domains, start):
         data = load_raw(path)
         cats = data.get("categories", {})
         for raw in data.get("terms", []):

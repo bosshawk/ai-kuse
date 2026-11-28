@@ -1,6 +1,7 @@
 ---
 name: kumihan
 description: 日本語の HTML（アーティファクト、レポート、説明ページ）の組版を整えるスキル。日本語の本文を含む HTML ファイルを書くとき・書き換えるときに使う。lang="ja" と、文節で折り返す組版CSSを入れ、「表示す／る。」のような語の途中の折り返しを防ぐ。色・フォント・レイアウト・文章の中身は扱わない。Markdown は扱わない。
+license: MIT-0
 allowed-tools: Bash(uv run --script ${CLAUDE_SKILL_DIR}/scripts/kumihan.py *)
 ---
 

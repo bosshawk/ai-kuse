@@ -2,7 +2,7 @@
 
 <!-- ai-kuse-disable -->
 
-`/ai-kuse survey` と `/ai-kuse add` で読む。ワードを一覧に足すかどうか、どう検出するか、重さをどうするかを、用例と件数で決める手順。2026-11 の調査（`research/2026-11-term-survey/README.md`）で使ったやり方をまとめたもの。
+`/kuchiguse survey` と `/kuchiguse add` で読む。ワードを一覧に足すかどうか、どう検出するか、重さをどうするかを、用例と件数で決める手順。2026-11 の調査（`research/2026-11-term-survey/README.md`）で使ったやり方をまとめたもの。
 
 ## 0. 前提
 

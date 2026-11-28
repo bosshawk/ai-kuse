@@ -1,0 +1,17 @@
+{
+  "description": "Markdown と HTML の保存後に、組版CSSを入れ、詰め込みと AI の口癖の warn を返す。環境変数 AI_KUSE_HOOK=1 のときだけ動く",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv",
+            "args": ["run", "--script", "${CLAUDE_PLUGIN_ROOT}/hooks/post_write.py"]
+          }
+        ]
+      }
+    ]
+  }
+}

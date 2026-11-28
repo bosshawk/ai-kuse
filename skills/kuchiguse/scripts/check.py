@@ -39,7 +39,7 @@ def main(argv: list[str] | None = None) -> int:
     if not args.files and not args.stdin:
         ap.error("ファイルを指定するか --stdin を付けてください")
 
-    terms = load_terms(args.domain)
+    terms = load_terms(args.domain, Path.cwd())
     if not terms:
         print("ワードの一覧が見つかりません（terms/*.yaml）", file=sys.stderr)
         return 2

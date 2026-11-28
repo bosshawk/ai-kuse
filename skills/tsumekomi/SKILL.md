@@ -1,6 +1,7 @@
 ---
 name: tsumekomi
-description: 日本語の文書（Markdown と HTML）で、1か所に詰め込みすぎている所を測り、書き換え方を提案するスキル。表のセル・カード・箇条書きの1項目・一文・段落・見出しの長さを目安と比べる。利用者が tsumekomi の名前を出して頼んだとき（「/tsumekomi」）、「詰め込みすぎを見て」「表やカードに長文が入っていないか見て」と頼まれたとき、naoshi から呼ばれたときに使う。語の選び方（ai-kuse）、文の推敲（yomiyasu）、折り返し（kumihan）は扱わない。
+description: 日本語の文書（Markdown と HTML）で、1か所に詰め込みすぎている所を測り、書き換え方を提案するスキル。表のセル・カード・箇条書きの1項目・一文・段落・見出しの長さを目安と比べる。利用者が tsumekomi の名前を出して頼んだとき（「/tsumekomi」）、「詰め込みすぎを見て」「表やカードに長文が入っていないか見て」と頼まれたとき、naoshi から呼ばれたときに使う。語の選び方（kuchiguse）、文の推敲（yomiyasu）、折り返し（kumihan）は扱わない。
+license: MIT-0
 allowed-tools: Bash(uv run --script ${CLAUDE_SKILL_DIR}/scripts/tsumekomi.py *)
 ---
 
@@ -17,7 +18,7 @@ allowed-tools: Bash(uv run --script ${CLAUDE_SKILL_DIR}/scripts/tsumekomi.py *)
 | `/tsumekomi <ファイル…>` | 測って提案する（check）。ファイルは書き換えない |
 | `/tsumekomi fix <ファイル…>` | 書き換えると決めた所をファイルに反映する |
 
-対象の決め方は ai-kuse と同じです。引数のファイル → 依頼に貼られた文章（`--stdin --type md`）→ 直前に自分が書いた本文、の順に探し、どれもなければ尋ねます。
+対象の決め方は kuchiguse と同じです。引数のファイル → 依頼に貼られた文章（`--stdin --type md`）→ 直前に自分が書いた本文、の順に探し、どれもなければ尋ねます。
 
 ## check
 

@@ -1,6 +1,14 @@
 # AGENTS.md
 
-このリポジトリは、AI が書いた日本語の文書の癖を見つけて書き換える Claude Code のスキル集です。スキルは `skills/<スキル名>/` に1つずつあり、`~/.claude/skills/<スキル名>` から symlink を張って使います。個人用です。
+このリポジトリは、AI が書いた日本語の文書の癖を見つけて書き換えるスキル集です。スキルは `skills/<スキル名>/` に1つずつあります。
+
+同じリポジトリを3通りで配ります。どれでも動くように保ちます。
+
+- Claude Code のプラグイン（リポジトリの最上位がプラグイン兼マーケットプレイス。プラグイン名は `ai-kuse`）
+- Agent Skills（`npx skills add`、`gh skill install` が `skills/*/SKILL.md` を読む）
+- 開発用の symlink（`install.sh`）
+
+ほかの人が使う前提なので、スキルのフォルダに利用者のデータを書かない（プラグインでは更新で消える）。利用者が足すワードは `~/.ai-kuse/terms/` か、プロジェクトの `.ai-kuse/terms/` に置く。
 
 測るのはスクリプト、書き換えるか残すかを決めるのは Claude、という分け方をすべてのスキルで守ります。ルールには「読みにくい状態」だけを書き、見せ方（表・箇条・カード）を決めるルールは足しません。
 
@@ -14,13 +22,18 @@ CLAUDE.md は置いていません。Claude Code v2.1.277 以降は、CLAUDE.md 
 | `skills/tsumekomi/` | 詰め込みを測る。目安は `limits.yaml` |
 | `skills/kumihan/` | 日本語の HTML の組版CSS |
 | `skills/katachi/` | 読みにくくなる状態の一覧 |
-| `skills/ai-kuse/` | AI の口癖のワード。下の表 |
-| `shared/finding.schema.json` | 全スキル共通の指摘の書式（`--format findings`） |
-| `hooks/post_write.py` | PostToolUse hook。HTML に kumihan fix をかけ、warn を上位5件返す |
-| `tests/` | スキルをまたいだテスト（共通の書式、naoshi、hook） |
-| `install.sh` | `skills/*` を `~/.claude/skills/` にリンクし、hook の設定例を表示する |
+| `skills/kuchiguse/` | AI の口癖のワード。下の表 |
+| `.claude-plugin/` | `plugin.json`（版とライセンス）と `marketplace.json` |
+| `hooks/hooks.json` | プラグインの hook の登録 |
+| `hooks/post_write.py` | hook の本体。`AI_KUSE_HOOK=1` のときだけ動く |
+| `shared/finding.schema.json` | 全スキル共通の指摘の書式 |
+| `tests/` | スキルをまたいだテスト |
+| `install.sh` | 開発用。`skills/*` を symlink する |
+| `LICENSE` | MIT-0 |
 
-`skills/ai-kuse/` の中身:
+kuchiguse は、もとは ai-kuse という名前でした。プラグイン名と同じだと `/ai-kuse:ai-kuse` になるため改名しました。本文の印（`ai-kuse-ignore` など）と `.ai-kuse/` は、使っている文書があるので名前を変えていません。
+
+`skills/kuchiguse/` の中身:
 
 | パス | 中身 |
 |---|---|
@@ -40,7 +53,7 @@ CLAUDE.md は置いていません。Claude Code v2.1.277 以降は、CLAUDE.md 
 ## コマンド
 
 ```bash
-uv run --script skills/ai-kuse/scripts/validate.py
+uv run --script skills/kuchiguse/scripts/validate.py
 ```
 
 ```bash
@@ -55,7 +68,7 @@ uv run --script skills/naoshi/scripts/naoshi.py check README.md AGENTS.md skills
 
 ## ワードを足す・変えるとき
 
-パスは `skills/ai-kuse/` からの相対で書く。
+パスは `skills/kuchiguse/` からの相対で書く。
 
 - 手順と判断の基準は `references/survey.md` に従う。足す前に `scripts/survey.py` で使い方と件数を確かめる。
 - 文書では、一覧に載せるものを「ワード」と呼ぶ。
@@ -86,3 +99,11 @@ uv run --script skills/naoshi/scripts/naoshi.py check README.md AGENTS.md skills
 
 - Conventional Commits（`feat:` `fix:` `docs:` `test:` `chore:`）。本文は日本語でよい。
 - ワードの追加は `feat(terms): 〇〇を追加` の形にする。
+
+## リリース
+
+利用者には、プラグインの版とタグで更新が届く。
+
+1. `.claude-plugin/plugin.json` の `version` を上げる（同じ版のままだと、プラグインの利用者に更新が届かない）。
+2. テストと `claude plugin validate .` を通す。
+3. main に入れてから、同じ版のタグを打ち、`gh skill publish --tag v<版>` で GitHub のリリースを作る。

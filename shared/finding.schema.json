@@ -18,7 +18,7 @@
       "required": ["skill", "id", "path", "line", "severity", "text", "message"],
       "additionalProperties": false,
       "properties": {
-        "skill": { "type": "string", "enum": ["ai-kuse", "tsumekomi", "kumihan", "review"] },
+        "skill": { "type": "string", "enum": ["kuchiguse", "tsumekomi", "kumihan", "review"] },
         "id": { "type": "string", "description": "ルールかワードの id" },
         "path": { "type": "string" },
         "line": { "type": "integer", "minimum": 0, "description": "1 始まり。ファイル全体への指摘は 0" },

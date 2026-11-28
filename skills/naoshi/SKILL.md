@@ -1,6 +1,7 @@
 ---
 name: naoshi
-description: 日本語の文書（Markdown と HTML）を読みやすく書き換えるときに、ほかのスキルをまとめて呼ぶスキル。kumihan（折り返し）・tsumekomi（詰め込み）・ai-kuse（AI の口癖）の検出をまとめて出し、決まった順に書き換え、別のエージェントに読み手として読ませる。利用者が naoshi の名前を出して頼んだとき（「/naoshi」「naoshi にかけて」「naoshi で review して」）、「この文書を読みやすくして」「書いた文書を見直して」とはっきり頼んだときに使う。
+description: 日本語の文書（Markdown と HTML）を読みやすく書き換えるときに、ほかのスキルをまとめて呼ぶスキル。kumihan（折り返し）・tsumekomi（詰め込み）・kuchiguse（AI の口癖）の検出をまとめて出し、決まった順に書き換え、別のエージェントに読み手として読ませる。利用者が naoshi の名前を出して頼んだとき（「/naoshi」「naoshi にかけて」「naoshi で review して」）、「この文書を読みやすくして」「書いた文書を見直して」とはっきり頼んだときに使う。
+license: MIT-0
 allowed-tools: Bash(uv run --script ${CLAUDE_SKILL_DIR}/scripts/naoshi.py *) Bash(uv run --script ${CLAUDE_SKILL_DIR}/../kumihan/scripts/kumihan.py *)
 ---
 
@@ -44,7 +45,7 @@ uv run --script ${CLAUDE_SKILL_DIR}/scripts/naoshi.py check <ファイル…>
    ```
 3. **測る**: `naoshi.py check --format findings <ファイル…>`
 4. **詰め込み（tsumekomi）**: 指摘ごとに、書き換える・残す・確かめるを決める。判断の基準は `../tsumekomi/SKILL.md` の「check」に従う。
-5. **語（ai-kuse）**: 指摘ごとに、言い換える・残す・確かめるを決める。判断の基準は `../ai-kuse/SKILL.md` の「check」に従う。
+5. **語（kuchiguse）**: 指摘ごとに、言い換える・残す・確かめるを決める。判断の基準は `../kuchiguse/SKILL.md` の「check」に従う。
 6. **測り直す**: もう一度 check を実行する。書き換えると決めた指摘が残っていれば、4 と 5 をもう1回だけ行う。2回で消えなければ、そのまま報告する。
 7. **比べる**: 控えた情報が消えていないか確かめる。
    ```bash
@@ -92,6 +93,6 @@ uv run --script ${CLAUDE_SKILL_DIR}/scripts/naoshi.py check <ファイル…>
 `hooks/post_write.py` を Claude Code の PostToolUse hook に入れると、Markdown と HTML を保存するたびに次のことが起きる（設定は README の「hook」）。
 
 - HTML なら、kumihan fix が自動で入る。
-- tsumekomi と ai-kuse の warn が上位5件まで返ってくる。返ってきたら、その場で書き換えるか、残す理由を1行で書く。
+- tsumekomi と kuchiguse の warn が上位5件まで返ってくる。返ってきたら、その場で書き換えるか、残す理由を1行で書く。
 
 止めたいときは、環境変数 `AI_KUSE_HOOK=0` を設定する。
